@@ -1,6 +1,8 @@
 package com.iohw.knobot.chat.assistant;
 
+import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.TokenStream;
+import dev.langchain4j.service.UserMessage;
 
 /**
  * @author: iohw
@@ -8,5 +10,5 @@ import dev.langchain4j.service.TokenStream;
  * @description:
  */
 public interface Assistant {
-    TokenStream chat(String input);
+    TokenStream chat(@MemoryId String memoryId, @UserMessage String input);
 }
