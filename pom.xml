@@ -6,6 +6,7 @@
     <modules>
         <module>knobot-service</module>
         <module>knobot-core</module>
+        <module>knobot-pojo</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -1,16 +1,12 @@
 package com.iohw.knobot.chat.controller;
 
 import com.iohw.knobot.chat.assistant.Assistant;
-import com.iohw.knobot.chat.config.PersistentChatMemoryStore;
-import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
-import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
+import com.iohw.knobot.chat.dto.ChatSessionDto;
+import com.iohw.knobot.chat.dto.ChatMessageDto;
 import com.iohw.knobot.chat.service.ChatService;
 import com.iohw.knobot.chat.service.SessionSideBarService;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.service.AiServices;
+import com.iohw.knobot.response.Result;
 import dev.langchain4j.service.TokenStream;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -79,12 +75,17 @@ public class ChatController {
     }
 
     @GetMapping("/session")
-    public List<ChatSessionDto> queryChatSessions(long userId) {
+    public Result<List<ChatSessionDto>> queryChatSessions(long userId) {
         return sessionSideBarService.queryChatSessions(userId);
     }
 
+    @GetMapping("/session-create")
+    public Result<String> createChatSession(long userId) {
+        return sessionSideBarService.createChatSession(userId);
+    }
+
     @GetMapping("/messages")
-    public List<ChatMessageDto> queryHistoryMessages(String memoryId) {
+    public Result<List<ChatMessageDto>> queryHistoryMessages(String memoryId) {
         return chatService.queryHistoryMessages(memoryId);
     }
 }
