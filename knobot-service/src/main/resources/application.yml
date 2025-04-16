@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: knobot-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: wangweiwei123
+    url: jdbc:mysql://localhost:3306/knobot?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&characterSetResults=utf8mb4&connectionCollation=utf8mb4_unicode_ci
+server:
+  port: 8080
+
+
+# MyBatis Configuration
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# LangChain4j Configuration
+langchain4j:
+  open-ai:
+    api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+    model-name: qwen-plus
+    base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    timout: 60
+  community:
+    dashscope:
+      # LLM
+      chat-model:
+        api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+        model-name: qwen-plus
+        temperature: 0.7
+      # Streaming LLM
+      streaming-chat-model:
+        api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+        model-name: qwen-plus
+      # Embedding model
+      embedding-model:
+        api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+        model-name: text-embedding-v3
+        dimensions: 1024
+
+pgvector:
+  database: vecdb
+  host: 192.168.195.134
+  port: 5432
+  user: postgres
+  password: postgres
+  table: vectors_db
+
+
+search:
+  api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
+  engine: google
+
+
+

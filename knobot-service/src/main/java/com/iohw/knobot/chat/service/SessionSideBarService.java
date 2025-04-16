@@ -2,6 +2,8 @@ package com.iohw.knobot.chat.service;
 
 
 import com.iohw.knobot.chat.dto.ChatSessionDto;
+import com.iohw.knobot.chat.request.CreateSessionRequest;
+import com.iohw.knobot.chat.vo.ChatSessionVO;
 import com.iohw.knobot.response.Result;
 
 import java.util.List;
@@ -14,5 +16,5 @@ import java.util.List;
 public interface SessionSideBarService {
     Result<List<ChatSessionDto>> queryChatSessions(long userId);
 
-    Result<String> createChatSession(long userId);
+    Result<ChatSessionVO> createChatSession(CreateSessionRequest userId);
 }

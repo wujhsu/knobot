@@ -19,10 +19,6 @@ import java.util.List;
 public interface ChatMessageConverter {
     ChatMessageConverter INSTANCE = Mappers.getMapper(ChatMessageConverter.class);
 
-    @Mapping(target = "role", expression = "java(chatMessage.type().toString().toLowerCase())")
-    @Mapping(target = "content", expression = "java(chatMessage.text())")
-    ChatMessageDto dtoToDto(ChatMessage chatMessage);
-
     @Mapping(target = "role", source = "role")
     @Mapping(target = "content", source = "content")
     ChatMessageDto toDto(ChatMessageDO chatMessageDO);

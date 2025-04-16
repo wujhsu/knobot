@@ -107,7 +107,7 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
                     toolMsg.id(), toolMsg.toolName(), toolMsg.text());
         } else if (message instanceof CustomMessage) {
             // 自定义消息可能需要JSON序列化
-            return ((CustomMessage) message).text();
+            return ((CustomMessage) message).toString();
         }
         throw new IllegalArgumentException("Unknown message type: " + message.getClass().getName());
     }
