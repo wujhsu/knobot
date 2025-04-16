@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.iohw.knobot.chat.mapper.ChatMessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.iohw.knobot.chat.entity.ChatMessageDO">
+        <id column="id" property="id"/>
+        <result column="message_id" property="messageId"/>
+        <result column="memory_id" property="memoryId"/>
+        <result column="role" property="role"/>
+        <result column="content" property="content"/>
+        <result column="tokens" property="tokens"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, message_id, memory_id, role, content, tokens, create_time
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO chat_message (message_id, memory_id, role, content, tokens)
+        VALUES
+        <foreach collection="records" item="record" separator=",">
+            (#{record.messageId}, #{record.memoryId}, #{record.role}, #{record.content}, #{record.tokens})
+        </foreach>
+    </insert>
+
+    <select id="selectByMemoryId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM chat_message
+        WHERE memory_id = #{memoryId}
+        ORDER BY create_time ASC
+    </select>
+
+    <select id="selectRecentByMemoryId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM chat_message
+        WHERE memory_id = #{memoryId}
+        ORDER BY create_time DESC
+        LIMIT #{limit}
+    </select>
+
+    <delete id="deleteByMemoryId">
+        DELETE FROM chat_message
+        WHERE memory_id = #{memoryId}
+    </delete>
+
+    <select id="sumTokensByMemoryId" resultType="java.lang.Integer">
+        SELECT COALESCE(SUM(tokens), 0)
+        FROM chat_message
+        WHERE memory_id = #{memoryId}
+    </select>
+</mapper>
