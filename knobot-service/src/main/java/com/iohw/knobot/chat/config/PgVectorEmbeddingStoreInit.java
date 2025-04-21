@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @RequiredArgsConstructor
-public class EmbeddingStoreInit {
+public class PgVectorEmbeddingStoreInit {
     final PgConfig pgConfig;
 
     @Bean

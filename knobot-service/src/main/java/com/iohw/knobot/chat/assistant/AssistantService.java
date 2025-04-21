@@ -1,20 +1,21 @@
 package com.iohw.knobot.chat.assistant;
 
 import com.iohw.knobot.chat.assistant.IAssistant.RAGAssistant;
-import com.iohw.knobot.chat.assistant.IAssistant.base.StreamAssistant;
 import com.iohw.knobot.chat.config.PersistentChatMemoryStore;
-import dev.langchain4j.data.segment.TextSegment;
+import com.iohw.knobot.chat.config.ContentRetrieverFactory;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.model.input.PromptTemplate;
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.content.injector.DefaultContentInjector;
 import dev.langchain4j.service.AiServices;
-import dev.langchain4j.store.embedding.EmbeddingStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: iohw
@@ -31,27 +32,28 @@ public class AssistantService {
 
     private final PersistentChatMemoryStore chatMemoryStore;
 
-    private final EmbeddingStoreContentRetriever embeddingStoreContentRetriever;
+    private final ContentRetrieverFactory contentRetrieverFactory;
 
-    @Bean
-    public StreamAssistant streamAssistant() {
-        return AiServices.builder(StreamAssistant.class)
-                .streamingChatLanguageModel(streamingChatLanguageModel)
-                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder()
-                        .id(memoryId)
-                        .maxMessages(20)
-                        .chatMemoryStore(chatMemoryStore)
-                        .build())
-                .build();
+    // 缓存已创建的 RAG 助手实例
+    private final Map<String, RAGAssistant> ragAssistantCache = new ConcurrentHashMap<>();
+
+    public RAGAssistant getRagAssistant(String memoryId) {
+        return ragAssistantCache.computeIfAbsent(memoryId, this::createRagAssistant);
     }
 
-    @Bean
-    public RAGAssistant ragAssistant() {
+    private RAGAssistant createRagAssistant(String memoryId) {
+        var retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .contentRetriever(contentRetrieverFactory.createRetriever(memoryId))
+                .contentInjector(DefaultContentInjector.builder()
+                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
+                        .build())
+                .build();
+
         return AiServices.builder(RAGAssistant.class)
                 .streamingChatLanguageModel(streamingChatLanguageModel)
-                .contentRetriever(embeddingStoreContentRetriever)
-                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder()
-                        .id(memoryId)
+                .retrievalAugmentor(retrievalAugmentor)
+                .chatMemoryProvider(id -> MessageWindowChatMemory.builder()
+                        .id(id)
                         .maxMessages(20)
                         .chatMemoryStore(chatMemoryStore)
                         .build())

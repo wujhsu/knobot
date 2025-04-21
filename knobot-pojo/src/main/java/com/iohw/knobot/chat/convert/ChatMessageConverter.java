@@ -2,10 +2,8 @@ package com.iohw.knobot.chat.convert;
 
 import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.dto.ChatMessageDto;
-import dev.langchain4j.data.message.ChatMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
  * @date: 2025/4/13 18:17
  * @description:
  */
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ChatMessageConverter {
     ChatMessageConverter INSTANCE = Mappers.getMapper(ChatMessageConverter.class);
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @date: 2025/4/13 17:34
  * @description:
  */
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ChatSessionConverter {
     ChatSessionConverter INSTANCE = Mappers.getMapper(ChatSessionConverter.class);
 

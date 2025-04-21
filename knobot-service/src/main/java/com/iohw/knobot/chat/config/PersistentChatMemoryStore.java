@@ -36,7 +36,7 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
         List<ChatMessageDO> chatMessageDOS = chatMessageMapper.selectByMemoryId(memoryId);
         for (ChatMessageDO chatMessageDO : chatMessageDOS) {
             String role = chatMessageDO.getRole();
-            String content = chatMessageDO.getContent();
+            String content = chatMessageDO.getEnhancedContent() != null ? chatMessageDO.getEnhancedContent() : chatMessageDO.getContent();
             ChatMessage message = switch (role.toLowerCase()) {
                 case "system" -> SystemMessage.from(content);
                 case "user" -> UserMessage.from(content);
@@ -55,15 +55,25 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
 //        String json = ChatMessageSerializer.messagesToJson(list);
 //        map.put(o.toString(), json);
         // todo 优化：增量更新 or ...
+        // 全量清空旧数据 + 全量增加新数据
         String memoryId = o.toString();
         deleteMessages(memoryId);
         List<ChatMessageDO> messageList = new ArrayList<>();
         for (ChatMessage chatMessage : list) {
             String role = getRoleFromMessage(chatMessage);
             String content = getContentMessage(chatMessage);
+
+            String originContent = content;
+            String enhancedContent = null;
+            if(isUserMessageEnhanced(content)) {
+                enhancedContent = content;
+                originContent = content.substring(0, content.lastIndexOf("\n补充信息如下:\n"));
+            }
+
             ChatMessageDO chatHistoryDO = ChatMessageDO.builder()
                     .role(role)
-                    .content(content)
+                    .content(originContent)
+                    .enhancedContent(enhancedContent)
                     .memoryId(memoryId)
                     .messageId(UUID.randomUUID().toString())
                     .build();
@@ -97,6 +107,7 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
         if (message instanceof SystemMessage) {
             return ((SystemMessage) message).text();
         } else if (message instanceof UserMessage) {
+
             return ((UserMessage) message).singleText();
         } else if (message instanceof AiMessage) {
             return ((AiMessage) message).text();
@@ -111,7 +122,9 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
         }
         throw new IllegalArgumentException("Unknown message type: " + message.getClass().getName());
     }
-
+    private static boolean isUserMessageEnhanced(String userMessage) {
+        return userMessage.contains("\n补充信息如下:\n");
+    }
     private ToolExecutionResultMessage parseToolMessage(String content) {
         // 简单实现 - 实际应根据存储格式调整
         try {

@@ -15,14 +15,14 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, message_id, memory_id, role, content, tokens, create_time
+        id, message_id, memory_id, role, content, enhanced_content, tokens, create_time
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO chat_message (message_id, memory_id, role, content, tokens)
+        INSERT INTO chat_message (message_id, memory_id, role, content, enhanced_content, tokens)
         VALUES
         <foreach collection="records" item="record" separator=",">
-            (#{record.messageId}, #{record.memoryId}, #{record.role}, #{record.content}, #{record.tokens})
+            (#{record.messageId}, #{record.memoryId}, #{record.role}, #{record.content}, #{record.enhancedContent}, #{record.tokens})
         </foreach>
     </insert>
 
