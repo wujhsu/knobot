@@ -1,15 +1,17 @@
 package com.iohw.knobot.chat.service.impl;
 
 import com.iohw.knobot.chat.convert.ChatSessionConverter;
-import com.iohw.knobot.chat.enums.ChatSessionEnum;
+import com.iohw.knobot.chat.entity.enums.ChatSessionEnum;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
-import com.iohw.knobot.chat.request.CreateSessionRequest;
+import com.iohw.knobot.chat.request.command.CreateConversationCommand;
+import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
+import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.service.SessionSideBarService;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
 import com.iohw.knobot.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.iohw.knobot.chat.dto.ChatSessionDto;
+import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
 import com.iohw.knobot.chat.entity.ChatSessionDO;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +35,7 @@ public class SessionSideBarServiceImpl implements SessionSideBarService {
     }
 
     @Override
-    public Result<ChatSessionVO> createChatSession(CreateSessionRequest request) {
+    public Result<ChatSessionVO> createChatSession(CreateConversationCommand request) {
         String uuid = UUID.randomUUID().toString();
         Long userId = request.getUserId();
         ChatSessionDO chatSessionDO = ChatSessionDO.builder()
@@ -47,5 +49,17 @@ public class SessionSideBarServiceImpl implements SessionSideBarService {
                 .title(NEW_SESSION_TITLE)
                 .memoryId(uuid)
                 .build());
+    }
+
+    @Override
+    public Result<Void> deleteChatConversation(DeleteConversationCommand request) {
+        chatSessionMapper.updateStatus(request.getMemoryId(), 2);
+        return Result.success(null);
+    }
+
+    @Override
+    public Result<Void> deleteChatConversationTitleUpdate(UpdateConversationTitleCommand command) {
+        chatSessionMapper.updateTitle(command.getMemoryId(), command.getNewTitle());
+        return Result.success(null);
     }
 }

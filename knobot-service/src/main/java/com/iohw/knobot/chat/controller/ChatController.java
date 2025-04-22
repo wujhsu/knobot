@@ -1,10 +1,12 @@
 package com.iohw.knobot.chat.controller;
 
 import com.iohw.knobot.chat.assistant.AssistantService;
-import com.iohw.knobot.chat.dto.ChatSessionDto;
-import com.iohw.knobot.chat.dto.ChatMessageDto;
+import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
+import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
 import com.iohw.knobot.chat.request.ChatRequest;
-import com.iohw.knobot.chat.request.CreateSessionRequest;
+import com.iohw.knobot.chat.request.command.CreateConversationCommand;
+import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
+import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.vo.FileUploadVO;
 import com.iohw.knobot.chat.service.ChatService;
 import com.iohw.knobot.chat.service.SessionSideBarService;
@@ -185,14 +187,24 @@ public class ChatController {
     }
 
 
-    @GetMapping("/session")
-    public Result<List<ChatSessionDto>> queryChatSessions(Long userId) {
+    @GetMapping("/conversation-history")
+    public Result<List<ChatSessionDto>> queryChatConversationHistory(Long userId) {
         return sessionSideBarService.queryChatSessions(userId);
     }
 
-    @PostMapping("/session-create")
-    public Result<ChatSessionVO> createChatSession(@RequestBody CreateSessionRequest request) {
-        return sessionSideBarService.createChatSession(request);
+    @PostMapping("/conversation-create")
+    public Result<ChatSessionVO> createChatConversation(@RequestBody CreateConversationCommand command) {
+        return sessionSideBarService.createChatSession(command);
+    }
+
+    @PostMapping("/conversation-delete")
+    public Result<Void> deleteChatConversation(@RequestBody DeleteConversationCommand command) {
+        return sessionSideBarService.deleteChatConversation(command);
+    }
+
+    @PostMapping("/conversation-title-update")
+    public Result<Void> deleteChatConversationTitleUpdate(@RequestBody UpdateConversationTitleCommand command) {
+        return sessionSideBarService.deleteChatConversationTitleUpdate(command);
     }
 
     @GetMapping("/messages")

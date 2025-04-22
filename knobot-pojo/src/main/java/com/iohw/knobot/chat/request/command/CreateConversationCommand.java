@@ -1,4 +1,4 @@
-package com.iohw.knobot.chat.request;
+package com.iohw.knobot.chat.request.command;
 
 import lombok.Data;
 
@@ -8,6 +8,6 @@ import lombok.Data;
  * @description:
  */
 @Data
-public class CreateSessionRequest {
+public class CreateConversationCommand {
     private Long userId;
 }

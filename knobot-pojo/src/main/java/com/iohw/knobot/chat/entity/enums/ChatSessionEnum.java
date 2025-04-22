@@ -1,4 +1,4 @@
-package com.iohw.knobot.chat.enums;
+package com.iohw.knobot.chat.entity.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
