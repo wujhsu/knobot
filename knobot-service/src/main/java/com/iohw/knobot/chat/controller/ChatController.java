@@ -1,6 +1,8 @@
 package com.iohw.knobot.chat.controller;
 
 import com.iohw.knobot.chat.assistant.AssistantService;
+import com.iohw.knobot.chat.assistant.IAssistant.StreamingAssistant;
+import com.iohw.knobot.chat.assistant.IAssistant.WebSearchAssistant;
 import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
 import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
 import com.iohw.knobot.chat.request.ChatRequest;
@@ -54,6 +56,7 @@ public class ChatController {
     final SessionSideBarService sessionSideBarService;
     final ChatService chatService;
     final AssistantService assistantService;
+    final WebSearchAssistant webSearchAssistant;
 
     private final String UPLOAD_PATH = "./documents";
     private static Map<String, String> filePathMap = new HashMap<>();
@@ -134,7 +137,12 @@ public class ChatController {
         }
 
         try {
-            TokenStream tokenStream = assistantService.getRagAssistant(memoryId).chat(memoryId, request.getUserMessage());
+            StreamingAssistant assistant = assistantService.getRagAssistant(memoryId);
+            // 开启联网搜索
+            if(request.getIsWebSearchRequest()) {
+                assistant = webSearchAssistant;
+            }
+            TokenStream tokenStream = assistant.chat(memoryId, request.getUserMessage());
             tokenStream
                     .onPartialResponse(token -> {
                         try {
@@ -189,12 +197,12 @@ public class ChatController {
 
     @GetMapping("/conversation-history")
     public Result<List<ChatSessionDto>> queryChatConversationHistory(Long userId) {
-        return sessionSideBarService.queryChatSessions(userId);
+        return sessionSideBarService.queryChatConversation(userId);
     }
 
     @PostMapping("/conversation-create")
     public Result<ChatSessionVO> createChatConversation(@RequestBody CreateConversationCommand command) {
-        return sessionSideBarService.createChatSession(command);
+        return sessionSideBarService.createChatConversation(command);
     }
 
     @PostMapping("/conversation-delete")

@@ -20,7 +20,7 @@ mybatis:
 langchain4j:
   open-ai:
     api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
-    model-name: qwen-plus
+    model-name: DeepSeek-V3
     base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
     timout: 60
   community:
@@ -50,8 +50,9 @@ pgvector:
 
 
 search:
-  api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
+  # api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
   engine: google
+  api-key: a3NXKiXu2AiRg68BJBiegThg
 
 
 

@@ -16,9 +16,9 @@ import java.util.List;
  * @description:
  */
 public interface SessionSideBarService {
-    Result<List<ChatSessionDto>> queryChatSessions(long userId);
+    Result<List<ChatSessionDto>> queryChatConversation(long userId);
 
-    Result<ChatSessionVO> createChatSession(CreateConversationCommand userId);
+    Result<ChatSessionVO> createChatConversation(CreateConversationCommand userId);
 
     Result<Void> deleteChatConversation(DeleteConversationCommand request);
 

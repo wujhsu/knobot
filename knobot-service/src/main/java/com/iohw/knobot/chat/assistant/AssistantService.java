@@ -1,17 +1,27 @@
 package com.iohw.knobot.chat.assistant;
 
 import com.iohw.knobot.chat.assistant.IAssistant.RAGAssistant;
+import com.iohw.knobot.chat.assistant.IAssistant.WebSearchAssistant;
 import com.iohw.knobot.chat.config.PersistentChatMemoryStore;
 import com.iohw.knobot.chat.config.ContentRetrieverFactory;
+import com.iohw.knobot.config.properties.WebSearchProperties;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.injector.DefaultContentInjector;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.rag.content.retriever.WebSearchContentRetriever;
+import dev.langchain4j.rag.query.router.DefaultQueryRouter;
+import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.service.AiServices;
+import dev.langchain4j.web.search.WebSearchEngine;
+import dev.langchain4j.web.search.searchapi.SearchApiWebSearchEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -34,6 +44,8 @@ public class AssistantService {
 
     private final ContentRetrieverFactory contentRetrieverFactory;
 
+    final WebSearchProperties webSearchProperties;
+
     // 缓存已创建的 RAG 助手实例
     private final Map<String, RAGAssistant> ragAssistantCache = new ConcurrentHashMap<>();
 
@@ -50,6 +62,35 @@ public class AssistantService {
                 .build();
 
         return AiServices.builder(RAGAssistant.class)
+                .streamingChatLanguageModel(streamingChatLanguageModel)
+                .retrievalAugmentor(retrievalAugmentor)
+                .chatMemoryProvider(id -> MessageWindowChatMemory.builder()
+                        .id(id)
+                        .maxMessages(20)
+                        .chatMemoryStore(chatMemoryStore)
+                        .build())
+                .build();
+    }
+
+    @Bean
+    public WebSearchAssistant webSearchAssistant() {
+        WebSearchEngine searchEngine = SearchApiWebSearchEngine.builder()
+                .apiKey(webSearchProperties.getApiKey())
+                .engine(webSearchProperties.getEngine())
+                .build();
+
+        EmbeddingStoreContentRetriever embeddingStoreContentRetriever = contentRetrieverFactory.createRetriever(null);
+        WebSearchContentRetriever webSearchContentRetriever = WebSearchContentRetriever.builder()
+                .webSearchEngine(searchEngine)
+                .maxResults(3)
+                .build();
+
+        QueryRouter queryRouter = new DefaultQueryRouter(embeddingStoreContentRetriever, webSearchContentRetriever);
+        RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .queryRouter(queryRouter)
+                .build();
+
+        return AiServices.builder(WebSearchAssistant.class)
                 .streamingChatLanguageModel(streamingChatLanguageModel)
                 .retrievalAugmentor(retrievalAugmentor)
                 .chatMemoryProvider(id -> MessageWindowChatMemory.builder()

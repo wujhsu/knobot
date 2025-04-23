@@ -9,6 +9,7 @@ import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.service.SessionSideBarService;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
 import com.iohw.knobot.response.Result;
+import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
@@ -29,25 +30,25 @@ public class SessionSideBarServiceImpl implements SessionSideBarService {
     private ChatSessionMapper chatSessionMapper;
 
     @Override
-    public Result<List<ChatSessionDto>> queryChatSessions(long userId) {
+    public Result<List<ChatSessionDto>> queryChatConversation(long userId) {
         List<ChatSessionDO> chatSessionDOS = chatSessionMapper.selectByUserId(userId, 0);
         return Result.success(ChatSessionConverter.INSTANCE.toDtoList(chatSessionDOS));
     }
 
     @Override
-    public Result<ChatSessionVO> createChatSession(CreateConversationCommand request) {
-        String uuid = UUID.randomUUID().toString();
+    public Result<ChatSessionVO> createChatConversation(CreateConversationCommand request) {
+        String memoryId = IdGeneratorUtil.generateId();
         Long userId = request.getUserId();
         ChatSessionDO chatSessionDO = ChatSessionDO.builder()
                 .title(NEW_SESSION_TITLE)
                 .status(ChatSessionEnum.NORMAL.getStatus())
-                .memoryId(uuid)
+                .memoryId(memoryId)
                 .userId(userId)
                 .build();
         chatSessionMapper.insert(chatSessionDO);
         return Result.success(ChatSessionVO.builder()
                 .title(NEW_SESSION_TITLE)
-                .memoryId(uuid)
+                .memoryId(memoryId)
                 .build());
     }
 
