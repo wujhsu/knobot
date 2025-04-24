@@ -11,6 +11,8 @@ import reactor.core.publisher.Flux;
  * @description:
  */
 public interface StreamAssistant {
+    String chat(String userMessage);
+
     TokenStream chat(@MemoryId String memoryId, @UserMessage String input);
 
     Flux<String> Fchat(@MemoryId String memoryId, @UserMessage String input);
