@@ -88,6 +88,9 @@ public class AssistantService {
         QueryRouter queryRouter = new DefaultQueryRouter(embeddingStoreContentRetriever, webSearchContentRetriever);
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryRouter(queryRouter)
+                .contentInjector(DefaultContentInjector.builder()
+                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
+                        .build())
                 .build();
 
         return AiServices.builder(WebSearchAssistant.class)
