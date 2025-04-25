@@ -1,6 +1,8 @@
 package com.iohw.knobot.chat.config;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
@@ -9,6 +11,7 @@ import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -25,14 +28,19 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
     private ChatMessageMapper chatMessageMapper;
 
     final Map<String, String> map = new HashMap<>();
-
+    private Cache<String, String> cache = Caffeine.newBuilder()
+            .maximumSize(100)
+            .build();
 
     @Override
     public List<ChatMessage> getMessages(Object o) {
-//        String json = map.get(o.toString());
         String memoryId = (String) o;
+        String json = cache.getIfPresent(memoryId);
+        if(StringUtils.hasText(json))
+            // 走缓存
+            return ChatMessageDeserializer.messagesFromJson(json);
+
         List<ChatMessage> messages = new ArrayList<>();
-        if(memoryId.equals("default")) return messages;
         List<ChatMessageDO> chatMessageDOS = chatMessageMapper.selectByMemoryId(memoryId);
         for (ChatMessageDO chatMessageDO : chatMessageDOS) {
             String role = chatMessageDO.getRole();
@@ -52,8 +60,8 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
 
     @Override
     public void updateMessages(Object o, List<ChatMessage> list) {
-//        String json = ChatMessageSerializer.messagesToJson(list);
-//        map.put(o.toString(), json);
+        String json = ChatMessageSerializer.messagesToJson(list);
+        cache.put(o.toString(), json);
         // todo 优化：增量更新 or ...
         // 全量清空旧数据 + 全量增加新数据
         String memoryId = o.toString();
@@ -62,7 +70,7 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
         for (ChatMessage chatMessage : list) {
             String role = getRoleFromMessage(chatMessage);
             String content = getContentMessage(chatMessage);
-
+            // 若经过rag增强，分离出用户原始输入信息与被增加的输入信息
             String originContent = content;
             String enhancedContent = null;
             if(isUserMessageEnhanced(content)) {
