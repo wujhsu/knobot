@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class ChatRequest {
+    private String knowledgeLibId;
     private String userId;
     private String userMessage;
     private String fileId;

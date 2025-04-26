@@ -12,13 +12,24 @@ import com.iohw.knobot.library.request.UpdateKnowledgeLibDocCommand;
 import com.iohw.knobot.upload.UploadFileStrategy;
 import com.iohw.knobot.utils.FileUtils;
 import com.iohw.knobot.utils.IdGeneratorUtil;
+import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.parser.TextDocumentParser;
+import dev.langchain4j.data.document.splitter.DocumentSplitters;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+
+import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 
 /**
  * @author: iohw
@@ -31,6 +42,8 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
     private final KnowledgeLibDocumentMapper documentMapper;
     private final KnowledgeLibService knowledgeLibService;
     private final UploadFileStrategy uploadFileStrategy;
+    private final EmbeddingStore<TextSegment> embeddingStore;
+    private final EmbeddingModel embeddingModel;
 
     @Override
     @Transactional
@@ -45,10 +58,41 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
         documentDO.setDocumentSize(FileUtils.getFileSizeInMB(command.getFile()));
         documentMapper.insert(documentDO);
 
+        //更新向量数据库
+        loadFile2Store(upload.getFilePath(), null, command.getKnowledgeLibId());
+
         // 更新文档数量
         updateKnowledgeLibDocumentCount(documentDO.getKnowledgeLibId());
     }
 
+    private void loadFile2Store(String filePath, String memoryId, String knowledgeLibId) {
+        Path path = Paths.get(filePath).toAbsolutePath().normalize();
+        Document document = loadDocument(path.toString(), new TextDocumentParser());
+        EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .documentSplitter(DocumentSplitters.recursive(300, 20))
+                .documentTransformer(dc -> {
+                    if(memoryId != null) {
+                        dc.metadata().put("memoryId", memoryId);
+                    }
+                    if(knowledgeLibId != null) {
+                        dc.metadata().put("knowledgeLibId", knowledgeLibId);
+                    }
+                    return dc;
+                })
+                // todo 由于使用uuid替换文件名，给分段信息加上文件名不再有增强检索效果
+//                .textSegmentTransformer(textSegment -> TextSegment.from(
+//                        textSegment.metadata().getString("file_name") + "\n" + textSegment.text(),
+//                        textSegment.metadata()
+//                ))
+                .textSegmentTransformer(textSegment -> TextSegment.from(
+                        textSegment.text(),
+                        textSegment.metadata()
+                ))
+                .build();
+        embeddingStoreIngestor.ingest(document);
+    }
     @Override
     @Transactional
     public void batchAddDocuments(List<KnowledgeLibDocumentDO> documents) {

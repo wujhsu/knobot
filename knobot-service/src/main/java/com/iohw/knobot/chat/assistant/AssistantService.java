@@ -52,13 +52,16 @@ public class AssistantService {
     // 缓存已创建的 RAG 助手实例
     private final Map<String, RAGAssistant> ragAssistantCache = new ConcurrentHashMap<>();
 
-    public RAGAssistant getRagAssistant(String memoryId) {
-        return ragAssistantCache.computeIfAbsent(memoryId, this::createRagAssistant);
+    public RAGAssistant getRagAssistant(String memoryId, String knowledgeLibId) {
+        if(ragAssistantCache.containsKey(memoryId)) {
+            return ragAssistantCache.get(memoryId);
+        }
+        return createRagAssistant(memoryId, knowledgeLibId);
     }
 
-    private RAGAssistant createRagAssistant(String memoryId) {
+    private RAGAssistant createRagAssistant(String memoryId, String knowledgeLibId) {
         var retrievalAugmentor = DefaultRetrievalAugmentor.builder()
-                .contentRetriever(contentRetrieverFactory.createRetriever(memoryId))
+                .contentRetriever(contentRetrieverFactory.createRetriever(memoryId, knowledgeLibId))
                 .contentInjector(DefaultContentInjector.builder()
                         .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
                         .build())
@@ -82,7 +85,7 @@ public class AssistantService {
                 .engine(webSearchProperties.getEngine())
                 .build();
 
-        EmbeddingStoreContentRetriever embeddingStoreContentRetriever = contentRetrieverFactory.createRetriever(null);
+        EmbeddingStoreContentRetriever embeddingStoreContentRetriever = contentRetrieverFactory.createRetriever(null, null);
         WebSearchContentRetriever webSearchContentRetriever = WebSearchContentRetriever.builder()
                 .webSearchEngine(searchEngine)
                 .maxResults(3)

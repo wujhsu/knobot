@@ -6,6 +6,7 @@ import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 
@@ -20,8 +21,8 @@ public class ContentRetrieverFactory {
     private final EmbeddingModel embeddingModel;
     private final EmbeddingStore<TextSegment> embeddingStore;
 
-    public EmbeddingStoreContentRetriever createRetriever(String memoryId) {
-        if(memoryId == null || memoryId.isEmpty()) {
+    public EmbeddingStoreContentRetriever createRetriever(String memoryId, String knowledgeId) {
+        if(!StringUtils.hasText(memoryId)) {
             return EmbeddingStoreContentRetriever.builder()
                     .embeddingModel(embeddingModel)
                     .embeddingStore(embeddingStore)
@@ -29,10 +30,25 @@ public class ContentRetrieverFactory {
                     .minScore(0.8)
                     .build();
         }
+        if(!StringUtils.hasText(knowledgeId)) {
+            return EmbeddingStoreContentRetriever.builder()
+                    .embeddingModel(embeddingModel)
+                    .embeddingStore(embeddingStore)
+                    .filter(
+                            metadataKey("memoryId").isEqualTo(memoryId)
+                    )
+                    .maxResults(5)
+                    .minScore(0.8)
+                    .build();
+        }
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(embeddingModel)
                 .embeddingStore(embeddingStore)
-                .filter(metadataKey("memoryId").isEqualTo(memoryId))
+                .filter(
+                        metadataKey("memoryId").isEqualTo(memoryId).or(
+                                metadataKey("knowledgeId").isEqualTo(knowledgeId)
+                        )
+                )
                 .maxResults(5)
                 .minScore(0.8)
                 .build();

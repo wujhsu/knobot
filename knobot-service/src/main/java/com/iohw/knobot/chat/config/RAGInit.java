@@ -21,7 +21,7 @@ public class RAGInit {
     @Bean
     RetrievalAugmentor retrievalAugmentor() {
         return DefaultRetrievalAugmentor.builder()
-                .contentRetriever(contentRetrieverFactory.createRetriever("default"))
+                .contentRetriever(contentRetrieverFactory.createRetriever(null, null))
                 .contentInjector(DefaultContentInjector.builder()
                         .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
                         .build())

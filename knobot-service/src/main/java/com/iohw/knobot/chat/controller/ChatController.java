@@ -5,6 +5,7 @@ import com.iohw.knobot.chat.assistant.IAssistant.StreamingAssistant;
 import com.iohw.knobot.chat.assistant.IAssistant.WebSearchAssistant;
 import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
 import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
+import com.iohw.knobot.chat.request.ChangeKnowledgeLibCommand;
 import com.iohw.knobot.chat.request.ChatRequest;
 import com.iohw.knobot.chat.request.command.CreateConversationCommand;
 import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
@@ -64,43 +65,6 @@ public class ChatController {
 
     private static Map<String, String> filePathMap = new HashMap<>();
 
-    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter streamChat(@RequestParam("memoryId") String memoryId,  @RequestParam("input") String input) {
-        SseEmitter emitter = new SseEmitter(-1L); // 无超时
-        try {
-            TokenStream tokenStream = assistantService.getRagAssistant(memoryId).chat(memoryId, input);
-            tokenStream
-                    .onPartialResponse(token -> {
-                        try {
-                            emitter.send(SseEmitter.event()
-                                    .data(token)
-                                    .id(String.valueOf(System.currentTimeMillis()))
-                                    .name("message"));
-                        } catch (Exception e) {
-                            emitter.completeWithError(e);
-                        }
-                    })
-                    .onCompleteResponse(response -> {
-                        try {
-                            emitter.send(SseEmitter.event()
-                                    .data("[DONE]")
-                                    .id("done")
-                                    .name("done"));
-                            emitter.complete();
-                        } catch (Exception e) {
-                            emitter.completeWithError(e);
-                        }
-                    })
-                    .onError(e -> {
-                        emitter.completeWithError(e);
-                    })
-                    .start();
-        } catch (Exception e) {
-            emitter.completeWithError(e);
-        }
-        return emitter;
-    }
-
 
     @PostMapping("/upload")
     public Result<FileUploadVO> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -123,11 +87,11 @@ public class ChatController {
         //上传了附件
         if(!StringUtils.isEmpty(fileId)) {
             String filePath = filePathMap.get(fileId);
-            loadFile2Store(filePath, memoryId);
+            loadFile2Store(filePath, memoryId, request.getKnowledgeLibId());
         }
 
         try {
-            StreamingAssistant assistant = assistantService.getRagAssistant(memoryId);
+            StreamingAssistant assistant = assistantService.getRagAssistant(memoryId, request.getKnowledgeLibId());
             // 开启联网搜索
             if(request.getIsWebSearchRequest()) {
                 assistant = webSearchAssistant;
@@ -165,15 +129,18 @@ public class ChatController {
         return emitter;
     }
 
-    private void loadFile2Store(String filePath, String memoryId) {
+    private void loadFile2Store(String filePath, String memoryId, String knowledgeLibId) {
         Path path = Paths.get(filePath).toAbsolutePath().normalize();
         Document document = loadDocument(path.toString(), new TextDocumentParser());
         EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
                 .embeddingModel(embeddingModel)
                 .embeddingStore(embeddingStore)
-                .documentSplitter(DocumentSplitters.recursive(300, 0))
+                .documentSplitter(DocumentSplitters.recursive(300, 20))
                 .documentTransformer(dc -> {
                     dc.metadata().put("memoryId", memoryId);
+                    if(knowledgeLibId != null) {
+                        dc.metadata().put("knowledgeLibId", knowledgeLibId);
+                    }
                     return dc;
                 })
                 .textSegmentTransformer(textSegment -> TextSegment.from(
@@ -210,5 +177,10 @@ public class ChatController {
         return chatService.queryHistoryMessages(memoryId);
     }
 
+    @PostMapping("/changeKnowledgeLib")
+    public Result<Void> changeKnowledgeLib(ChangeKnowledgeLibCommand command) {
+        //切换知识库 --> 更改知识库过滤条件
 
+        return Result.success(null);
+    }
 }

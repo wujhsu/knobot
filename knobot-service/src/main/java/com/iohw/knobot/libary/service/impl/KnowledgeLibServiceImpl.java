@@ -79,7 +79,10 @@ public class KnowledgeLibServiceImpl implements KnowledgeLibService {
     public List<KnowledgeLibNameVO> queryKnowledgeLibList(QueryLibraryListRequest request) {
         List<KnowledgeLibDO> list = knowledgeLibMapper.selectByUserId(request.getUserId());
         return list.stream()
-                .map(item -> KnowledgeLibNameVO.builder().knowledgeLibName(item.getKnowledgeLibName()).build())
+                .map(item -> KnowledgeLibNameVO.builder()
+                        .knowledgeLibName(item.getKnowledgeLibName())
+                        .knowledgeLibId(item.getKnowledgeLibId())
+                        .build())
                 .toList();
     }
 }
