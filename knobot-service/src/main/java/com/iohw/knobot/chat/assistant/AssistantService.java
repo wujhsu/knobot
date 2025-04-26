@@ -4,6 +4,7 @@ import com.iohw.knobot.chat.assistant.IAssistant.RAGAssistant;
 import com.iohw.knobot.chat.assistant.IAssistant.WebSearchAssistant;
 import com.iohw.knobot.chat.config.PersistentChatMemoryStore;
 import com.iohw.knobot.chat.config.ContentRetrieverFactory;
+import com.iohw.knobot.chat.tool.SendEmailTool;
 import com.iohw.knobot.config.properties.WebSearchProperties;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -45,6 +46,8 @@ public class AssistantService {
     private final ContentRetrieverFactory contentRetrieverFactory;
 
     final WebSearchProperties webSearchProperties;
+
+    final SendEmailTool emailTool;
 
     // 缓存已创建的 RAG 助手实例
     private final Map<String, RAGAssistant> ragAssistantCache = new ConcurrentHashMap<>();

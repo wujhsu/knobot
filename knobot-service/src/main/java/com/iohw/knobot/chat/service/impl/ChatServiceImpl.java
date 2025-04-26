@@ -1,6 +1,6 @@
 package com.iohw.knobot.chat.service.impl;
 
-import com.iohw.knobot.chat.convert.ChatMessageConverter;
+import com.iohw.knobot.chat.entity.convert.ChatMessageConverter;
 import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;

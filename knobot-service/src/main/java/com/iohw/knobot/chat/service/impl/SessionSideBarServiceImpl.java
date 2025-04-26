@@ -1,6 +1,6 @@
 package com.iohw.knobot.chat.service.impl;
 
-import com.iohw.knobot.chat.convert.ChatSessionConverter;
+import com.iohw.knobot.chat.entity.convert.ChatSessionConverter;
 import com.iohw.knobot.chat.entity.enums.ChatSessionEnum;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
 import com.iohw.knobot.chat.request.command.CreateConversationCommand;
@@ -9,7 +9,6 @@ import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.service.SessionSideBarService;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
 import com.iohw.knobot.response.Result;
-import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
@@ -37,7 +36,7 @@ public class SessionSideBarServiceImpl implements SessionSideBarService {
 
     @Override
     public Result<ChatSessionVO> createChatConversation(CreateConversationCommand request) {
-        String memoryId = IdGeneratorUtil.generateId();
+        String memoryId = UUID.randomUUID().toString();
         Long userId = request.getUserId();
         ChatSessionDO chatSessionDO = ChatSessionDO.builder()
                 .title(NEW_SESSION_TITLE)

@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 public class CommonTests {
     @Test
     public void test() {
-        String str = "123 \n基于下面的信息回答：456";
-        System.out.println(str.substring(0, str.indexOf("\n基于下面的信息回答") == -1 ? str.length() : str.indexOf("\n基于下面的信息回答")));
+        String str = "123 \n解析理解下面的信息，回答用户的问题：456";
+        System.out.println(str.substring(0, str.indexOf("\n解析理解下面的信息，回答用户的问题") == -1 ? str.length() : str.indexOf("\n解析理解下面的信息，回答用户的问题")));
     }
 
     @Test
@@ -24,5 +24,10 @@ public class CommonTests {
                 System.out.println(Thread.currentThread().getName() + ": " + IdGeneratorUtil.generateId());
             }).start();
         }
+    }
+
+    @Test
+    public void test3() {
+        System.out.println(IdGeneratorUtil.generateLibId());
     }
 }

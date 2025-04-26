@@ -4,6 +4,7 @@ import org.springframework.util.IdGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -69,4 +70,26 @@ public class IdGeneratorUtil {
         return timestamp;
     }
 
+    public static String generateLibId() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder randomString = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(characters.length());
+            randomString.append(characters.charAt(index));
+        }
+        return randomString.toString();
+    }
+
+    public static String generateDocId() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("doc");
+        Random random = new Random();
+        for (int i = 0; i < 7; i++) {
+            // 生成 97 到 122 之间的随机整数，对应小写字母的 ASCII 码
+            int randomInt = random.nextInt(26) + 97;
+            sb.append((char) randomInt);
+        }
+        return sb.toString();
+    }
 }

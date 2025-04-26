@@ -28,6 +28,7 @@
         <lombok.version>1.18.30</lombok.version>
         <fastjson.version>2.0.47</fastjson.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <caffeine.version>3.1.8</caffeine.version>
     </properties>
 
     <dependencyManagement>
@@ -99,6 +100,11 @@
                 <artifactId>mybatis-spring-boot-starter-test</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>

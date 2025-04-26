@@ -13,7 +13,10 @@ import com.iohw.knobot.chat.vo.FileUploadVO;
 import com.iohw.knobot.chat.service.ChatService;
 import com.iohw.knobot.chat.service.SessionSideBarService;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
+import com.iohw.knobot.common.dto.FileUploadDto;
 import com.iohw.knobot.response.Result;
+import com.iohw.knobot.upload.FileUploadFactory;
+import com.iohw.knobot.upload.UploadFileStrategy;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
@@ -57,8 +60,8 @@ public class ChatController {
     final ChatService chatService;
     final AssistantService assistantService;
     final WebSearchAssistant webSearchAssistant;
+    final FileUploadFactory fileUploadFactory;
 
-    private final String UPLOAD_PATH = "./documents";
     private static Map<String, String> filePathMap = new HashMap<>();
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -101,29 +104,16 @@ public class ChatController {
 
     @PostMapping("/upload")
     public Result<FileUploadVO> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            Path uploadPath = Paths.get(UPLOAD_PATH);
-            if(!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            // 获取文件名
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            //保存文件
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        UploadFileStrategy uploadStrategy = fileUploadFactory.getUploadStrategy();
+        FileUploadDto uploadDto = uploadStrategy.upload(file, "/documents");
 
-            String fileId = String.valueOf(System.currentTimeMillis());
-            FileUploadVO fileUploadVO = FileUploadVO.builder()
-                    .fileId(fileId)
-                    .fileName(fileName)
-                    .filePath(filePath.toString())
-                    .build();
-            filePathMap.put(fileId, filePath.toString());
-            return Result.success(fileUploadVO);
-        } catch (IOException e) {
-            return null;
-        }
-
+        FileUploadVO fileUploadVO = FileUploadVO.builder()
+                .fileId(uploadDto.getFileId())
+                .fileName(uploadDto.getFileName())
+                .filePath(uploadDto.getFilePath())
+                .build();
+        filePathMap.put(uploadDto.getFileId(), uploadDto.getFilePath());
+        return Result.success(fileUploadVO);
     }
 
     @GetMapping(value = "/{memoryId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

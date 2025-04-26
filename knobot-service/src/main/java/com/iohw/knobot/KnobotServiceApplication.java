@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.iohw.knobot.chat.mapper")
+@MapperScan("com.iohw.knobot.*.mapper")
 public class KnobotServiceApplication {
 
     public static void main(String[] args) {

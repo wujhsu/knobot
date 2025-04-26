@@ -57,7 +57,6 @@ langchain4j:
         api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
         model-name: text-embedding-v3
         dimensions: 1024
-
 pgvector:
   database: vecdb
   host: 192.168.195.134
@@ -77,3 +76,6 @@ search:
 mail:
   from-address: 3979892804@qq.com
   to-address: 2023321332@qq.com
+
+upload:
+  way: local

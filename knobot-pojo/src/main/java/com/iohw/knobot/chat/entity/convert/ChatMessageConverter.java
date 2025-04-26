@@ -1,4 +1,4 @@
-package com.iohw.knobot.chat.convert;
+package com.iohw.knobot.chat.entity.convert;
 
 import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.entity.dto.ChatMessageDto;

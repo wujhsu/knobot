@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
+import com.iohw.knobot.utils.IdGeneratorUtil;
 import dev.langchain4j.data.message.*;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,6 @@ import java.util.*;
  */
 @Component
 public class PersistentChatMemoryStore implements ChatMemoryStore {
-    @Autowired
-    private ChatSessionMapper chatSessionMapper;
     @Autowired
     private ChatMessageMapper chatMessageMapper;
 
@@ -83,7 +82,7 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
                     .content(originContent)
                     .enhancedContent(enhancedContent)
                     .memoryId(memoryId)
-                    .messageId(UUID.randomUUID().toString())
+                    .messageId(IdGeneratorUtil.generateId())
                     .build();
             messageList.add(chatHistoryDO);
         }

@@ -10,6 +10,7 @@
         <result column="memory_id" property="memoryId"/>
         <result column="role" property="role"/>
         <result column="content" property="content"/>
+        <result column="enhanced_content" property="enhancedContent"/>
         <result column="tokens" property="tokens"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
