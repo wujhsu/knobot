@@ -3,10 +3,14 @@ package com.iohw.knobot;
 import com.iohw.knobot.chat.entity.ChatSessionDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
+import com.iohw.knobot.libary.mapper.KnowledgeLibMapper;
+import com.iohw.knobot.library.entity.KnowledgeLibDO;
+import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,10 +24,22 @@ public class MybatisTests {
     private ChatSessionMapper sessionMapper;
     @Autowired
     private ChatMessageMapper messageMapper;
+    @Autowired
+    private KnowledgeLibMapper knowledgeLibMapper;
     @Test
     public void test() {
-        ChatSessionDO chatSessionDO = ChatSessionDO.builder()
-                        .userId(3l).memoryId(UUID.randomUUID().toString()).build();
-        sessionMapper.insert(chatSessionDO);
+        List<ChatSessionDO> chatSessionDOS = sessionMapper.selectByUserId(2l, 0);
+        System.out.println("chatSessionDOS = " + chatSessionDOS);
+    }
+
+    @Test
+    public void knowledgeLibMapperTest() {
+        KnowledgeLibDO knowledgeLibDO = new KnowledgeLibDO();
+        knowledgeLibDO.setKnowledgeLibId(IdGeneratorUtil.generateLibId());
+        knowledgeLibDO.setKnowledgeLibName("1");
+        knowledgeLibDO.setKnowledgeLibDesc("2");
+        knowledgeLibDO.setDocumentCount(0);
+
+        knowledgeLibMapper.insert(knowledgeLibDO);
     }
 }

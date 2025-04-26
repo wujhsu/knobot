@@ -13,6 +13,7 @@ public class ChatMessageDO {
     private String memoryId;
     private String role;
     private String content;
+    private String enhancedContent;
     private Integer tokens;
     private LocalDateTime createTime;
 }

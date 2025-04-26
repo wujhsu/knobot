@@ -3,6 +3,7 @@ package com.iohw.knobot.chat.assistant.IAssistant.base;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 /**
  * @author: iohw
@@ -10,5 +11,9 @@ import dev.langchain4j.service.UserMessage;
  * @description:
  */
 public interface StreamAssistant {
+    String chat(String userMessage);
+
     TokenStream chat(@MemoryId String memoryId, @UserMessage String input);
+
+    Flux<String> Fchat(@MemoryId String memoryId, @UserMessage String input);
 }

@@ -4,11 +4,29 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: wangweiwei123
+    password:
     url: jdbc:mysql://localhost:3306/knobot?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&characterSetResults=utf8mb4&connectionCollation=utf8mb4_unicode_ci
+  mail:
+    username:
+    password:
+    host: smtp.qq.com
+    port: 587
+    default-encoding: UTF-8
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          starttls:
+            required: true
+          ssl:
+            #本地测试，先放开ssl
+            enable: false
+            required: false
+          #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: false
+
 server:
   port: 8080
-
 
 # MyBatis Configuration
 mybatis:
@@ -19,30 +37,29 @@ mybatis:
 # LangChain4j Configuration
 langchain4j:
   open-ai:
-    api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
-    model-name: qwen-plus
+    api-key:
+    model-name: DeepSeek-V3
     base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
     timout: 60
   community:
     dashscope:
       # LLM
       chat-model:
-        api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+        api-key:
         model-name: qwen-plus
         temperature: 0.7
       # Streaming LLM
       streaming-chat-model:
-        api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+        api-key:
         model-name: qwen-plus
       # Embedding model
       embedding-model:
-        api-key: sk-ffb9a184afe44f4ea959d3088f9387bb
+        api-key:
         model-name: text-embedding-v3
         dimensions: 1024
-
 pgvector:
   database: vecdb
-  host: 192.168.195.134
+  host:
   port: 5432
   user: postgres
   password: postgres
@@ -50,8 +67,15 @@ pgvector:
 
 
 search:
-  api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
+  # api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
   engine: google
+  api-key:
 
 
 
+mail:
+  from-address:
+  to-address:
+
+upload:
+  way: local

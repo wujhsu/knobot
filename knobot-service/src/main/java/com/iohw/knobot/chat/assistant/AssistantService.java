@@ -1,20 +1,32 @@
 package com.iohw.knobot.chat.assistant;
 
 import com.iohw.knobot.chat.assistant.IAssistant.RAGAssistant;
-import com.iohw.knobot.chat.assistant.IAssistant.base.StreamAssistant;
+import com.iohw.knobot.chat.assistant.IAssistant.WebSearchAssistant;
 import com.iohw.knobot.chat.config.PersistentChatMemoryStore;
-import dev.langchain4j.data.segment.TextSegment;
+import com.iohw.knobot.chat.config.ContentRetrieverFactory;
+import com.iohw.knobot.chat.tool.SendEmailTool;
+import com.iohw.knobot.config.properties.WebSearchProperties;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.input.PromptTemplate;
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.RetrievalAugmentor;
+import dev.langchain4j.rag.content.injector.DefaultContentInjector;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.rag.content.retriever.WebSearchContentRetriever;
+import dev.langchain4j.rag.query.router.DefaultQueryRouter;
+import dev.langchain4j.rag.query.router.QueryRouter;
 import dev.langchain4j.service.AiServices;
-import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.web.search.WebSearchEngine;
+import dev.langchain4j.web.search.searchapi.SearchApiWebSearchEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: iohw
@@ -31,14 +43,35 @@ public class AssistantService {
 
     private final PersistentChatMemoryStore chatMemoryStore;
 
-    private final EmbeddingStoreContentRetriever embeddingStoreContentRetriever;
+    private final ContentRetrieverFactory contentRetrieverFactory;
 
-    @Bean
-    public StreamAssistant streamAssistant() {
-        return AiServices.builder(StreamAssistant.class)
+    final WebSearchProperties webSearchProperties;
+
+    final SendEmailTool emailTool;
+
+    // 缓存已创建的 RAG 助手实例
+    private final Map<String, RAGAssistant> ragAssistantCache = new ConcurrentHashMap<>();
+
+    public RAGAssistant getRagAssistant(String memoryId, String knowledgeLibId) {
+        if(ragAssistantCache.containsKey(memoryId)) {
+            return ragAssistantCache.get(memoryId);
+        }
+        return createRagAssistant(memoryId, knowledgeLibId);
+    }
+
+    private RAGAssistant createRagAssistant(String memoryId, String knowledgeLibId) {
+        var retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .contentRetriever(contentRetrieverFactory.createRetriever(memoryId, knowledgeLibId))
+                .contentInjector(DefaultContentInjector.builder()
+                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
+                        .build())
+                .build();
+
+        return AiServices.builder(RAGAssistant.class)
                 .streamingChatLanguageModel(streamingChatLanguageModel)
-                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder()
-                        .id(memoryId)
+                .retrievalAugmentor(retrievalAugmentor)
+                .chatMemoryProvider(id -> MessageWindowChatMemory.builder()
+                        .id(id)
                         .maxMessages(20)
                         .chatMemoryStore(chatMemoryStore)
                         .build())
@@ -46,12 +79,31 @@ public class AssistantService {
     }
 
     @Bean
-    public RAGAssistant ragAssistant() {
-        return AiServices.builder(RAGAssistant.class)
+    public WebSearchAssistant webSearchAssistant() {
+        WebSearchEngine searchEngine = SearchApiWebSearchEngine.builder()
+                .apiKey(webSearchProperties.getApiKey())
+                .engine(webSearchProperties.getEngine())
+                .build();
+
+        EmbeddingStoreContentRetriever embeddingStoreContentRetriever = contentRetrieverFactory.createRetriever(null, null);
+        WebSearchContentRetriever webSearchContentRetriever = WebSearchContentRetriever.builder()
+                .webSearchEngine(searchEngine)
+                .maxResults(3)
+                .build();
+
+        QueryRouter queryRouter = new DefaultQueryRouter(embeddingStoreContentRetriever, webSearchContentRetriever);
+        RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .queryRouter(queryRouter)
+                .contentInjector(DefaultContentInjector.builder()
+                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
+                        .build())
+                .build();
+
+        return AiServices.builder(WebSearchAssistant.class)
                 .streamingChatLanguageModel(streamingChatLanguageModel)
-                .contentRetriever(embeddingStoreContentRetriever)
-                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.builder()
-                        .id(memoryId)
+                .retrievalAugmentor(retrievalAugmentor)
+                .chatMemoryProvider(id -> MessageWindowChatMemory.builder()
+                        .id(id)
                         .maxMessages(20)
                         .chatMemoryStore(chatMemoryStore)
                         .build())
