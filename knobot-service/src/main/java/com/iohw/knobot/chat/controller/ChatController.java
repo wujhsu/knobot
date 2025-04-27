@@ -19,7 +19,9 @@ import com.iohw.knobot.response.Result;
 import com.iohw.knobot.upload.FileUploadFactory;
 import com.iohw.knobot.upload.UploadFileStrategy;
 import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
+import dev.langchain4j.data.document.parser.apache.tika.ApacheTikaDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -131,7 +133,8 @@ public class ChatController {
 
     private void loadFile2Store(String filePath, String memoryId, String knowledgeLibId) {
         Path path = Paths.get(filePath).toAbsolutePath().normalize();
-        Document document = loadDocument(path.toString(), new TextDocumentParser());
+        DocumentParser parser = new ApacheTikaDocumentParser();
+        Document document = loadDocument(path.toString(), parser);
         EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
                 .embeddingModel(embeddingModel)
                 .embeddingStore(embeddingStore)
@@ -143,10 +146,11 @@ public class ChatController {
                     }
                     return dc;
                 })
-                .textSegmentTransformer(textSegment -> TextSegment.from(
-                        textSegment.metadata().getString("file_name") + "\n" + textSegment.text(),
-                        textSegment.metadata()
-                ))
+                // todo 由于使用uuid替换文件名，文件名不再能增强分段文本的检索
+//                .textSegmentTransformer(textSegment -> TextSegment.from(
+//                        textSegment.metadata().getString("file_name") + "\n" + textSegment.text(),
+//                        textSegment.metadata()
+//                ))
                 .build();
         embeddingStoreIngestor.ingest(document);
     }

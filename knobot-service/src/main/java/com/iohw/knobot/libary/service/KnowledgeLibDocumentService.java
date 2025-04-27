@@ -3,6 +3,7 @@ package com.iohw.knobot.libary.service;
 import com.iohw.knobot.library.entity.KnowledgeLibDocumentDO;
 import com.iohw.knobot.library.entity.vo.KnowledgeLibDocumentVO;
 import com.iohw.knobot.library.request.CreateKnowledgeLibDocCommand;
+import com.iohw.knobot.library.request.DeleteKnowledgeLibDocCommand;
 import com.iohw.knobot.library.request.UpdateKnowledgeLibDocCommand;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +48,7 @@ public interface KnowledgeLibDocumentService {
     /**
      * 删除文档
      */
-    void deleteDocument(String knowledgeLibId, String documentId);
+    void deleteDocument(DeleteKnowledgeLibDocCommand command);
 
     /**
      * 批量删除文档

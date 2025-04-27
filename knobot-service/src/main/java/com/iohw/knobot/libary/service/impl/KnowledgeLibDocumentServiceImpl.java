@@ -8,6 +8,7 @@ import com.iohw.knobot.libary.service.KnowledgeLibService;
 import com.iohw.knobot.library.entity.convert.KnowledgeLibDocumentConvert;
 import com.iohw.knobot.library.entity.vo.KnowledgeLibDocumentVO;
 import com.iohw.knobot.library.request.CreateKnowledgeLibDocCommand;
+import com.iohw.knobot.library.request.DeleteKnowledgeLibDocCommand;
 import com.iohw.knobot.library.request.UpdateKnowledgeLibDocCommand;
 import com.iohw.knobot.upload.UploadFileStrategy;
 import com.iohw.knobot.utils.FileUtils;
@@ -16,6 +17,7 @@ import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
@@ -44,6 +46,7 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
     private final UploadFileStrategy uploadFileStrategy;
     private final EmbeddingStore<TextSegment> embeddingStore;
     private final EmbeddingModel embeddingModel;
+
 
     @Override
     @Transactional
@@ -135,9 +138,9 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
 
     @Override
     @Transactional
-    public void deleteDocument(String knowledgeLibId, String documentId) {
-        documentMapper.deleteById(knowledgeLibId, documentId);
-        updateKnowledgeLibDocumentCount(knowledgeLibId);
+    public void deleteDocument(DeleteKnowledgeLibDocCommand command) {
+        documentMapper.deleteById(command.getDocumentId());
+        updateKnowledgeLibDocumentCount(command.getKnowledgeLibId());
     }
 
     @Override

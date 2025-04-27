@@ -2,10 +2,7 @@ package com.iohw.knobot.libary.controller;
 
 import com.iohw.knobot.libary.service.KnowledgeLibDocumentService;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
-import com.iohw.knobot.library.request.CreateKnowledgeLibCommand;
-import com.iohw.knobot.library.request.CreateKnowledgeLibDocCommand;
-import com.iohw.knobot.library.request.UpdateKnowledgeLibCommand;
-import com.iohw.knobot.library.request.UpdateKnowledgeLibDocCommand;
+import com.iohw.knobot.library.request.*;
 import com.iohw.knobot.response.Result;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
@@ -47,6 +44,18 @@ public class LibraryController {
     @PostMapping("/updateKnowledgeLibDocument")
     public Result<Void> updateKnowledgeLibDocument(UpdateKnowledgeLibDocCommand command) {
         knowledgeLibDocumentService.updateDocument(command);
+        return Result.success(null);
+    }
+
+    @PostMapping("/deleteKnowledgeLibDocument")
+    public Result<Void> deleteKnowledgeLibDocument(@RequestBody DeleteKnowledgeLibDocCommand command) {
+        knowledgeLibDocumentService.deleteDocument(command);
+        return Result.success(null);
+    }
+
+    @PostMapping("/deleteKnowledgeLib")
+    public Result<Void> deleteKnowledgeLib(DeleteKnowledgeLibCommand command) {
+        knowledgeLibService.deleteKnowledgeLib(command);
         return Result.success(null);
     }
 }

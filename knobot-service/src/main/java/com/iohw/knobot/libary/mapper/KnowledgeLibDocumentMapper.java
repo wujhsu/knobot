@@ -48,15 +48,14 @@ public interface KnowledgeLibDocumentMapper {
     /**
      * 删除文档
      */
-    void deleteById(@Param("knowledgeLibId") String knowledgeLibId,
-                   @Param("documentId") String documentId);
+    void deleteById(@Param("documentId") String documentId);
 
     /**
      * 批量删除文档
      */
     void batchDelete(@Param("knowledgeLibId") String knowledgeLibId,
                     @Param("documentIds") List<String> documentIds);
-
+    void deleteByKnowledgeLibId(@Param("knowledgeLibId") String knowledgeLibId);
     /**
      * 统计知识库下的文档数量
      */

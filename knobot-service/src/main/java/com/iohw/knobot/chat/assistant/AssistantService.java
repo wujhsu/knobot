@@ -17,6 +17,8 @@ import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.content.retriever.WebSearchContentRetriever;
 import dev.langchain4j.rag.query.router.DefaultQueryRouter;
 import dev.langchain4j.rag.query.router.QueryRouter;
+import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
+import dev.langchain4j.rag.query.transformer.QueryTransformer;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.web.search.WebSearchEngine;
 import dev.langchain4j.web.search.searchapi.SearchApiWebSearchEngine;
@@ -60,10 +62,10 @@ public class AssistantService {
     }
 
     private RAGAssistant createRagAssistant(String memoryId, String knowledgeLibId) {
-        var retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+        RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .contentRetriever(contentRetrieverFactory.createRetriever(memoryId, knowledgeLibId))
                 .contentInjector(DefaultContentInjector.builder()
-                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
+                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n文档/文件/附件的内容如下，你可以基于下面的内容回答：:\n{{contents}}"))
                         .build())
                 .build();
 
@@ -95,7 +97,7 @@ public class AssistantService {
         RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
                 .queryRouter(queryRouter)
                 .contentInjector(DefaultContentInjector.builder()
-                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n补充信息如下:\n{{contents}}"))
+                        .promptTemplate(PromptTemplate.from("{{userMessage}}\n文档/文件/附件的内容如下，你可以基于下面的内容回答：:\n{{contents}}"))
                         .build())
                 .build();
 

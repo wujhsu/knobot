@@ -1,7 +1,9 @@
 package com.iohw.knobot.chat.service.impl;
 
+import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.entity.convert.ChatSessionConverter;
 import com.iohw.knobot.chat.entity.enums.ChatSessionEnum;
+import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
 import com.iohw.knobot.chat.request.command.CreateConversationCommand;
 import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
@@ -9,6 +11,7 @@ import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.service.SessionSideBarService;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
 import com.iohw.knobot.response.Result;
+import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
@@ -27,6 +30,8 @@ import static com.iohw.knobot.chat.constant.ChatConstant.NEW_SESSION_TITLE;
 public class SessionSideBarServiceImpl implements SessionSideBarService {
     @Autowired
     private ChatSessionMapper chatSessionMapper;
+    @Autowired
+    private ChatMessageMapper chatMessageMapper;
 
     @Override
     public Result<List<ChatSessionDto>> queryChatConversation(long userId) {
@@ -45,6 +50,15 @@ public class SessionSideBarServiceImpl implements SessionSideBarService {
                 .userId(userId)
                 .build();
         chatSessionMapper.insert(chatSessionDO);
+        // 附上机器人问候语
+        ChatMessageDO chatMessageDO = ChatMessageDO.builder()
+                .messageId(IdGeneratorUtil.generateId())
+                .role("assistant")
+                .memoryId(memoryId)
+                .content("你好呀~很高兴能跟你交流😄")
+                .build();
+        chatMessageMapper.insert(chatMessageDO);
+
         return Result.success(ChatSessionVO.builder()
                 .title(NEW_SESSION_TITLE)
                 .memoryId(memoryId)

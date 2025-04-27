@@ -46,7 +46,7 @@ public class ContentRetrieverFactory {
                 .embeddingStore(embeddingStore)
                 .filter(
                         metadataKey("memoryId").isEqualTo(memoryId).or(
-                                metadataKey("knowledgeId").isEqualTo(knowledgeId)
+                                metadataKey("knowledgeLibId").isEqualTo(knowledgeId)
                         )
                 )
                 .maxResults(5)

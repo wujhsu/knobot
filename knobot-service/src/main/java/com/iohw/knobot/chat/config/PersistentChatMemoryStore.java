@@ -7,7 +7,9 @@ import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
 import com.iohw.knobot.utils.IdGeneratorUtil;
+import dev.langchain4j.community.model.dashscope.QwenTokenizer;
 import dev.langchain4j.data.message.*;
+import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +27,9 @@ import java.util.*;
 public class PersistentChatMemoryStore implements ChatMemoryStore {
     @Autowired
     private ChatMessageMapper chatMessageMapper;
+    @Autowired
+    private Tokenizer tokenizer;
 
-    final Map<String, String> map = new HashMap<>();
     private Cache<String, String> cache = Caffeine.newBuilder()
             .maximumSize(100)
             .build();
@@ -49,7 +52,6 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
                 case "user" -> UserMessage.from(content);
                 case "assistant" -> AiMessage.from(content);
                 case "tool" -> parseToolMessage(content);
-                //case "custom" -> new CustomMessage(content);
                 default -> throw new RuntimeException("不存在该角色: " + role.toLowerCase());
             };
             messages.add(message);
@@ -74,15 +76,16 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
             String enhancedContent = null;
             if(isUserMessageEnhanced(content)) {
                 enhancedContent = content;
-                originContent = content.substring(0, content.lastIndexOf("\n补充信息如下:\n"));
+                originContent = content.substring(0, content.lastIndexOf("\n文档/文件/附件的内容如下，你可以基于下面的内容回答：:\n"));
             }
-
+            //int tokens = tokenizer.estimateTokenCountInMessage(chatMessage);
             ChatMessageDO chatHistoryDO = ChatMessageDO.builder()
                     .role(role)
                     .content(originContent)
                     .enhancedContent(enhancedContent)
                     .memoryId(memoryId)
                     .messageId(IdGeneratorUtil.generateId())
+                    //.tokens(tokens)
                     .build();
             messageList.add(chatHistoryDO);
         }
@@ -130,7 +133,7 @@ public class PersistentChatMemoryStore implements ChatMemoryStore {
         throw new IllegalArgumentException("Unknown message type: " + message.getClass().getName());
     }
     private static boolean isUserMessageEnhanced(String userMessage) {
-        return userMessage.contains("\n补充信息如下:\n");
+        return userMessage.contains("\n文档/文件/附件的内容如下，你可以基于下面的内容回答：:\n");
     }
     private ToolExecutionResultMessage parseToolMessage(String content) {
         // 简单实现 - 实际应根据存储格式调整
