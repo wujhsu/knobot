@@ -30,4 +30,9 @@ public class CommonTests {
     public void test3() {
         System.out.println(IdGeneratorUtil.generateLibId());
     }
+
+    @Test
+    public void test4() {
+        System.out.println(System.getenv());
+    }
 }

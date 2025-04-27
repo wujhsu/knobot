@@ -26,6 +26,12 @@
             (#{record.messageId}, #{record.memoryId}, #{record.role}, #{record.content}, #{record.enhancedContent}, #{record.tokens})
         </foreach>
     </insert>
+    <insert id="insert">
+        INSERT INTO chat_message (message_id, memory_id, role, content, enhanced_content, tokens)
+        VALUES
+            (#{record.messageId}, #{record.memoryId}, #{record.role}, #{record.content}, #{record.enhancedContent}, #{record.tokens})
+
+    </insert>
 
     <select id="selectByMemoryId" resultMap="BaseResultMap">
         SELECT

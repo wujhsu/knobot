@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Mapper
 public interface ChatMessageMapper {
-
+    void insert(@Param("record") ChatMessageDO chatMessageDO);
     // 批量插入聊天记录
     int batchInsert(@Param("records") List<ChatMessageDO> records);
 

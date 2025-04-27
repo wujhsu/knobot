@@ -84,8 +84,7 @@
 
     <delete id="deleteById">
         DELETE FROM knowledge_lib_document
-        WHERE knowledge_lib_id = #{knowledgeLibId}
-        AND document_id = #{documentId}
+        WHERE document_id = #{documentId}
     </delete>
 
     <delete id="batchDelete">
@@ -95,6 +94,10 @@
         <foreach collection="documentIds" item="documentId" open="(" separator="," close=")">
             #{documentId}
         </foreach>
+    </delete>
+    <delete id="deleteByKnowledgeLibId">
+        delete from knowledge_lib_document
+        where knowledge_lib_id = #{knowledgeLibId}
     </delete>
 
     <select id="selectCountByKnowledgeLibId" resultType="java.lang.Integer">

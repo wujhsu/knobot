@@ -1,15 +1,13 @@
 package com.iohw.knobot.libary.service.impl;
 
+import com.iohw.knobot.libary.mapper.KnowledgeLibDocumentMapper;
 import com.iohw.knobot.library.entity.KnowledgeLibDO;
 import com.iohw.knobot.libary.mapper.KnowledgeLibMapper;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
 import com.iohw.knobot.library.entity.convert.KnowledgeLibConvert;
 import com.iohw.knobot.library.entity.vo.KnowledgeLibNameVO;
 import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
-import com.iohw.knobot.library.request.CreateKnowledgeLibCommand;
-import com.iohw.knobot.library.request.QueryLibraryDetailListRequest;
-import com.iohw.knobot.library.request.QueryLibraryListRequest;
-import com.iohw.knobot.library.request.UpdateKnowledgeLibCommand;
+import com.iohw.knobot.library.request.*;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class KnowledgeLibServiceImpl implements KnowledgeLibService {
-
+    private final KnowledgeLibDocumentMapper documentMapper;
     private final KnowledgeLibMapper knowledgeLibMapper;
 
     @Override
@@ -71,8 +69,11 @@ public class KnowledgeLibServiceImpl implements KnowledgeLibService {
 
     @Override
     @Transactional
-    public void deleteKnowledgeLib(String knowledgeLibId) {
-        knowledgeLibMapper.deleteById(knowledgeLibId);
+    public void deleteKnowledgeLib(DeleteKnowledgeLibCommand command) {
+        // 1.删除知识库关联的文档
+        documentMapper.deleteByKnowledgeLibId(command.getKnowledgeLibId());
+        // 2.删除知识库
+        knowledgeLibMapper.deleteById(command.getKnowledgeLibId());
     }
 
     @Override

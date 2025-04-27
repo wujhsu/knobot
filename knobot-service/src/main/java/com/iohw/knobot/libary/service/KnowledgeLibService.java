@@ -3,10 +3,7 @@ package com.iohw.knobot.libary.service;
 import com.iohw.knobot.library.entity.KnowledgeLibDO;
 import com.iohw.knobot.library.entity.vo.KnowledgeLibNameVO;
 import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
-import com.iohw.knobot.library.request.CreateKnowledgeLibCommand;
-import com.iohw.knobot.library.request.QueryLibraryDetailListRequest;
-import com.iohw.knobot.library.request.QueryLibraryListRequest;
-import com.iohw.knobot.library.request.UpdateKnowledgeLibCommand;
+import com.iohw.knobot.library.request.*;
 
 import java.util.List;
 
@@ -44,7 +41,7 @@ public interface KnowledgeLibService {
     /**
      * 删除知识库
      */
-    void deleteKnowledgeLib(String knowledgeLibId);
+    void deleteKnowledgeLib(DeleteKnowledgeLibCommand command);
 
     List<KnowledgeLibNameVO> queryKnowledgeLibList(QueryLibraryListRequest request);
 }
