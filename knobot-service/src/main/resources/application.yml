@@ -4,11 +4,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: wangweiwei123
+    password:
     url: jdbc:mysql://localhost:3306/knobot?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&characterSetResults=utf8mb4&connectionCollation=utf8mb4_unicode_ci
   mail:
     username: 3979892804@qq.com
-    password: xujoiejhieltcgfg
+    password:
     host: smtp.qq.com
     port: 587
     default-encoding: UTF-8
@@ -57,27 +57,27 @@ langchain4j:
         dimensions: 1024
 pgvector:
   database: vecdb
-  host: 192.168.195.134
+  host:
   port: 5432
   user: postgres
-  password: postgres
+  password:
   table: vectors_db
 
 
 search:
   # api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
   engine: google
-  api-key: a3NXKiXu2AiRg68BJBiegThg
+  api-key:
 
 llm:
-  apikey: sk-89ff2436d9ed48a7a91689ff4a718aed
+  apikey:
   model: deepseek-reasoner
   baseUrl: https://api.deepseek.com
 
 
 mail:
-  from-address: 3979892804@qq.com
-  to-address: 2023321332@qq.com
+  from-address:
+  to-address:
 
 upload:
   way: local
