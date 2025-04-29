@@ -8,7 +8,7 @@ import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
 import com.iohw.knobot.library.request.QueryDocumentLibRequest;
 import com.iohw.knobot.library.request.QueryLibraryDetailListRequest;
 import com.iohw.knobot.library.request.QueryLibraryListRequest;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.response.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

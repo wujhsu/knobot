@@ -1,4 +1,4 @@
-package com.iohw.knobot.response;
+package com.iohw.knobot.common.response;
 
 import lombok.Builder;
 import lombok.Data;
