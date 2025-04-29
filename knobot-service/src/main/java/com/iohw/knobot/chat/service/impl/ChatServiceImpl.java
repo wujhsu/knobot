@@ -5,7 +5,7 @@ import com.iohw.knobot.chat.entity.ChatMessageDO;
 import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.service.ChatService;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

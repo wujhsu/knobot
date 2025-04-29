@@ -1,7 +1,7 @@
 package com.iohw.knobot.chat.service;
 
 import com.iohw.knobot.chat.entity.dto.ChatMessageDto;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.response.Result;
 
 import java.util.List;
 

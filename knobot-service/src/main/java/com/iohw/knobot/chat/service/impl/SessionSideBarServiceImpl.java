@@ -10,7 +10,7 @@ import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
 import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.service.SessionSideBarService;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.response.Result;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,18 @@
-package com.iohw.knobot.chat.controller;
+package com.iohw.knobot.home.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.iohw.knobot.chat.assistant.IAssistant.EmailAssistant;
 import com.iohw.knobot.chat.request.command.SubmitIssueCommand;
 import com.iohw.knobot.chat.tool.SendEmailTool;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.request.CozeWorkFlowRequest;
+import com.iohw.knobot.common.response.CozeWorkFlowResponse;
+import com.iohw.knobot.common.response.Result;
+import com.iohw.knobot.coze.entity.WeatherData;
+import com.iohw.knobot.coze.request.DayWhetherRequest;
+import com.iohw.knobot.home.serivce.CozeService;
+import com.iohw.knobot.utils.CozeClient;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.AiServices;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
     @Autowired
     private ChatLanguageModel model;
-
     @Autowired
     private SendEmailTool sendEmailTool;
+    @Autowired
+    private CozeService cozeService;
 
     @PostMapping("/submit-issue")
     public Result<Void> submitIssue(@RequestBody SubmitIssueCommand issue) {
@@ -37,5 +44,10 @@ public class HomeController {
                 .build();
         emailAssistant.sendEmailToAuthor(issue.getIssueDescription());
         return Result.success(null);
+    }
+
+    @PostMapping("/getWeather")
+    public Result<WeatherData> getWeather(DayWhetherRequest request) {
+        return Result.success(cozeService.getWeatherData(request));
     }
 }

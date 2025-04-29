@@ -3,13 +3,9 @@ package com.iohw.knobot.libary.controller;
 import com.iohw.knobot.libary.service.KnowledgeLibDocumentService;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
 import com.iohw.knobot.library.request.*;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.response.Result;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.compress.utils.Lists;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 
 /**
  * @author: iohw

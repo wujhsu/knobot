@@ -6,7 +6,7 @@ import com.iohw.knobot.chat.request.command.CreateConversationCommand;
 import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
 import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
 import com.iohw.knobot.chat.vo.ChatSessionVO;
-import com.iohw.knobot.response.Result;
+import com.iohw.knobot.common.response.Result;
 
 import java.util.List;
 

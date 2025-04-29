@@ -4,11 +4,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password:
+    password: wangweiwei123
     url: jdbc:mysql://localhost:3306/knobot?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&characterSetResults=utf8mb4&connectionCollation=utf8mb4_unicode_ci
   mail:
-    username:
-    password:
+    username: 3979892804@qq.com
+    password: xujoiejhieltcgfg
     host: smtp.qq.com
     port: 587
     default-encoding: UTF-8
@@ -36,30 +36,28 @@ mybatis:
 
 # LangChain4j Configuration
 langchain4j:
-  open-ai:
-    api-key:
-    model-name: DeepSeek-V3
-    base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-    timout: 60
   community:
     dashscope:
+      tokenizer:
+        api-key: ${DASHSCOPE_API_KEY}
+        model-name: qwen-plus
       # LLM
       chat-model:
-        api-key:
+        api-key: ${DASHSCOPE_API_KEY}
         model-name: qwen-plus
         temperature: 0.7
       # Streaming LLM
       streaming-chat-model:
-        api-key:
+        api-key: ${DASHSCOPE_API_KEY}
         model-name: qwen-plus
       # Embedding model
       embedding-model:
-        api-key:
+        api-key: ${DASHSCOPE_API_KEY}
         model-name: text-embedding-v3
         dimensions: 1024
 pgvector:
   database: vecdb
-  host:
+  host: 192.168.195.134
   port: 5432
   user: postgres
   password: postgres
@@ -69,13 +67,17 @@ pgvector:
 search:
   # api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
   engine: google
-  api-key:
+  api-key: a3NXKiXu2AiRg68BJBiegThg
 
+llm:
+  apikey: sk-89ff2436d9ed48a7a91689ff4a718aed
+  model: deepseek-reasoner
+  baseUrl: https://api.deepseek.com
 
 
 mail:
-  from-address:
-  to-address:
+  from-address: 3979892804@qq.com
+  to-address: 2023321332@qq.com
 
 upload:
   way: local
