@@ -47,7 +47,7 @@ public class HomeController {
     }
 
     @PostMapping("/getWeather")
-    public Result<WeatherData> getWeather(DayWhetherRequest request) {
+    public Result<WeatherData> getWeather(@RequestBody DayWhetherRequest request) {
         return Result.success(cozeService.getWeatherData(request));
     }
 }
