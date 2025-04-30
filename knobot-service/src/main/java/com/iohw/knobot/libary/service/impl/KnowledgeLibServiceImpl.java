@@ -28,7 +28,7 @@ public class KnowledgeLibServiceImpl implements KnowledgeLibService {
     private final KnowledgeLibMapper knowledgeLibMapper;
 
     @Override
-    @Transactional
+
     public void createKnowledgeLib(CreateKnowledgeLibCommand command) {
         KnowledgeLibDO knowledgeLibDO = new KnowledgeLibDO();
         knowledgeLibDO.setUserId(command.getUserId());
@@ -52,7 +52,7 @@ public class KnowledgeLibServiceImpl implements KnowledgeLibService {
     }
 
     @Override
-    @Transactional
+
     public void updateKnowledgeLib(UpdateKnowledgeLibCommand command) {
         KnowledgeLibDO knowledgeLibDO = new KnowledgeLibDO();
         knowledgeLibDO.setKnowledgeLibId(command.getKnowledgeLibId());
@@ -62,13 +62,13 @@ public class KnowledgeLibServiceImpl implements KnowledgeLibService {
     }
 
     @Override
-    @Transactional
+
     public void updateDocumentCount(String knowledgeLibId, Integer count) {
         knowledgeLibMapper.updateDocumentCount(knowledgeLibId, count);
     }
 
     @Override
-    @Transactional
+
     public void deleteKnowledgeLib(DeleteKnowledgeLibCommand command) {
         // 1.删除知识库关联的文档
         documentMapper.deleteByKnowledgeLibId(command.getKnowledgeLibId());

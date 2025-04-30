@@ -44,12 +44,9 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
     private final KnowledgeLibDocumentMapper documentMapper;
     private final KnowledgeLibService knowledgeLibService;
     private final UploadFileStrategy uploadFileStrategy;
-    private final EmbeddingStore<TextSegment> embeddingStore;
-    private final EmbeddingModel embeddingModel;
-
+    private final EmbeddingStoreIngestor ingestor;
 
     @Override
-    @Transactional
     public void addDocument(CreateKnowledgeLibDocCommand command) {
         KnowledgeLibDocumentDO documentDO = new KnowledgeLibDocumentDO();
         documentDO.setDocumentName(command.getDocumentName());
@@ -62,42 +59,19 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
         documentMapper.insert(documentDO);
 
         //更新向量数据库
-        loadFile2Store(upload.getFilePath(), null, command.getKnowledgeLibId());
+        loadFile2Store(upload.getFilePath());
 
         // 更新文档数量
         updateKnowledgeLibDocumentCount(documentDO.getKnowledgeLibId());
     }
 
-    private void loadFile2Store(String filePath, String memoryId, String knowledgeLibId) {
+    private void loadFile2Store(String filePath) {
         Path path = Paths.get(filePath).toAbsolutePath().normalize();
         Document document = loadDocument(path.toString(), new TextDocumentParser());
-        EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
-                .embeddingModel(embeddingModel)
-                .embeddingStore(embeddingStore)
-                .documentSplitter(DocumentSplitters.recursive(300, 20))
-                .documentTransformer(dc -> {
-                    if(memoryId != null) {
-                        dc.metadata().put("memoryId", memoryId);
-                    }
-                    if(knowledgeLibId != null) {
-                        dc.metadata().put("knowledgeLibId", knowledgeLibId);
-                    }
-                    return dc;
-                })
-                // todo 由于使用uuid替换文件名，给分段信息加上文件名不再有增强检索效果
-//                .textSegmentTransformer(textSegment -> TextSegment.from(
-//                        textSegment.metadata().getString("file_name") + "\n" + textSegment.text(),
-//                        textSegment.metadata()
-//                ))
-                .textSegmentTransformer(textSegment -> TextSegment.from(
-                        textSegment.text(),
-                        textSegment.metadata()
-                ))
-                .build();
-        embeddingStoreIngestor.ingest(document);
+        ingestor.ingest(document);
     }
     @Override
-    @Transactional
+
     public void batchAddDocuments(List<KnowledgeLibDocumentDO> documents) {
         if (!documents.isEmpty()) {
             documentMapper.batchInsert(documents);
@@ -116,7 +90,7 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
     }
 
     @Override
-    @Transactional
+
     public void updateDocument(UpdateKnowledgeLibDocCommand command) {
         KnowledgeLibDocumentDO documentDO = new KnowledgeLibDocumentDO();
         documentDO.setDocumentName(command.getDocumentName());
@@ -131,20 +105,20 @@ public class KnowledgeLibDocumentServiceImpl implements KnowledgeLibDocumentServ
     }
 
     @Override
-    @Transactional
+
     public void updateDocumentStatus(String knowledgeLibId, String documentId, Integer status) {
         documentMapper.updateStatus(knowledgeLibId, documentId, status);
     }
 
     @Override
-    @Transactional
+
     public void deleteDocument(DeleteKnowledgeLibDocCommand command) {
         documentMapper.deleteById(command.getDocumentId());
         updateKnowledgeLibDocumentCount(command.getKnowledgeLibId());
     }
 
     @Override
-    @Transactional
+
     public void batchDeleteDocuments(String knowledgeLibId, List<String> documentIds) {
         documentMapper.batchDelete(knowledgeLibId, documentIds);
         updateKnowledgeLibDocumentCount(knowledgeLibId);

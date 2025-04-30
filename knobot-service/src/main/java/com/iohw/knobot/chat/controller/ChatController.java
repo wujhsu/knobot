@@ -53,13 +53,12 @@ import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.load
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
-    final EmbeddingModel embeddingModel;
-    final EmbeddingStore<TextSegment> embeddingStore;
     final SessionSideBarService sessionSideBarService;
     final ChatService chatService;
     final AssistantService assistantService;
     final WebSearchAssistant webSearchAssistant;
     final FileUploadFactory fileUploadFactory;
+    final EmbeddingStoreIngestor ingestor;
 
     private static Map<String, String> filePathMap = new HashMap<>();
 
@@ -85,7 +84,7 @@ public class ChatController {
         //上传了附件
         if(!StringUtils.isEmpty(fileId)) {
             String filePath = filePathMap.get(fileId);
-            loadFile2Store(filePath, memoryId, request.getKnowledgeLibId());
+            loadFile2Store(filePath);
         }
 
         try {
@@ -127,28 +126,11 @@ public class ChatController {
         return emitter;
     }
 
-    private void loadFile2Store(String filePath, String memoryId, String knowledgeLibId) {
+    private void loadFile2Store(String filePath) {
         Path path = Paths.get(filePath).toAbsolutePath().normalize();
         DocumentParser parser = new ApacheTikaDocumentParser();
         Document document = loadDocument(path.toString(), parser);
-        EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
-                .embeddingModel(embeddingModel)
-                .embeddingStore(embeddingStore)
-                .documentSplitter(DocumentSplitters.recursive(300, 20))
-                .documentTransformer(dc -> {
-                    dc.metadata().put("memoryId", memoryId);
-                    if(knowledgeLibId != null) {
-                        dc.metadata().put("knowledgeLibId", knowledgeLibId);
-                    }
-                    return dc;
-                })
-                // todo 由于使用uuid替换文件名，文件名不再能增强分段文本的检索
-//                .textSegmentTransformer(textSegment -> TextSegment.from(
-//                        textSegment.metadata().getString("file_name") + "\n" + textSegment.text(),
-//                        textSegment.metadata()
-//                ))
-                .build();
-        embeddingStoreIngestor.ingest(document);
+        ingestor.ingest(document);
     }
 
 
@@ -177,10 +159,4 @@ public class ChatController {
         return chatService.queryHistoryMessages(memoryId);
     }
 
-    @PostMapping("/changeKnowledgeLib")
-    public Result<Void> changeKnowledgeLib(ChangeKnowledgeLibCommand command) {
-        //切换知识库 --> 更改知识库过滤条件
-
-        return Result.success(null);
-    }
 }
