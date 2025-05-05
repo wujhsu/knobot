@@ -1,4 +1,4 @@
-package com.iohw.knobot.library.entity.vo;
+package com.iohw.knobot.library.model.vo;
 
 import lombok.Builder;
 import lombok.Data;

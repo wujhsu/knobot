@@ -1,7 +1,7 @@
 package com.iohw.knobot.chat.service;
 
 
-import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
+import com.iohw.knobot.chat.model.dto.ChatSessionDto;
 import com.iohw.knobot.chat.request.command.CreateConversationCommand;
 import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
 import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;

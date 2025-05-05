@@ -1,7 +1,7 @@
-package com.iohw.knobot.library.entity.convert;
+package com.iohw.knobot.library.model.convert;
 
-import com.iohw.knobot.library.entity.KnowledgeLibDO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
+import com.iohw.knobot.library.model.KnowledgeLibDO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

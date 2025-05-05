@@ -1,11 +1,10 @@
 package com.iohw.knobot.libary.service;
 
-import com.iohw.knobot.library.entity.KnowledgeLibDocumentDO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibDocumentVO;
+import com.iohw.knobot.library.model.KnowledgeLibDocumentDO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibDocumentVO;
 import com.iohw.knobot.library.request.CreateKnowledgeLibDocCommand;
 import com.iohw.knobot.library.request.DeleteKnowledgeLibDocCommand;
 import com.iohw.knobot.library.request.UpdateKnowledgeLibDocCommand;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

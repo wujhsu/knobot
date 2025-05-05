@@ -1,20 +1,18 @@
 package com.iohw.knobot.libary.service.impl;
 
 import com.iohw.knobot.libary.mapper.KnowledgeLibDocumentMapper;
-import com.iohw.knobot.library.entity.KnowledgeLibDO;
+import com.iohw.knobot.library.model.KnowledgeLibDO;
 import com.iohw.knobot.libary.mapper.KnowledgeLibMapper;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
-import com.iohw.knobot.library.entity.convert.KnowledgeLibConvert;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibNameVO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
+import com.iohw.knobot.library.model.convert.KnowledgeLibConvert;
+import com.iohw.knobot.library.model.vo.KnowledgeLibNameVO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibVO;
 import com.iohw.knobot.library.request.*;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author: iohw

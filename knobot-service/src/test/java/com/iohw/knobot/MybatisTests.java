@@ -1,17 +1,16 @@
 package com.iohw.knobot;
 
-import com.iohw.knobot.chat.entity.ChatSessionDO;
+import com.iohw.knobot.chat.model.ChatSessionDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
 import com.iohw.knobot.libary.mapper.KnowledgeLibMapper;
-import com.iohw.knobot.library.entity.KnowledgeLibDO;
+import com.iohw.knobot.library.model.KnowledgeLibDO;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author: iohw

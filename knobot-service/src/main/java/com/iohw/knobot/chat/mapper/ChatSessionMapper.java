@@ -1,6 +1,6 @@
 package com.iohw.knobot.chat.mapper;
 
-import com.iohw.knobot.chat.entity.ChatSessionDO;
+import com.iohw.knobot.chat.model.ChatSessionDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,12 +1,12 @@
 package com.iohw.knobot.libary.service.impl;
 
 import com.iohw.knobot.common.dto.FileUploadDto;
-import com.iohw.knobot.library.entity.KnowledgeLibDocumentDO;
+import com.iohw.knobot.library.model.KnowledgeLibDocumentDO;
 import com.iohw.knobot.libary.mapper.KnowledgeLibDocumentMapper;
 import com.iohw.knobot.libary.service.KnowledgeLibDocumentService;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
-import com.iohw.knobot.library.entity.convert.KnowledgeLibDocumentConvert;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibDocumentVO;
+import com.iohw.knobot.library.model.convert.KnowledgeLibDocumentConvert;
+import com.iohw.knobot.library.model.vo.KnowledgeLibDocumentVO;
 import com.iohw.knobot.library.request.CreateKnowledgeLibDocCommand;
 import com.iohw.knobot.library.request.DeleteKnowledgeLibDocCommand;
 import com.iohw.knobot.library.request.UpdateKnowledgeLibDocCommand;
@@ -15,20 +15,12 @@ import com.iohw.knobot.utils.FileUtils;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
-import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.Tokenizer;
-import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;

@@ -1,4 +1,4 @@
-package com.iohw.knobot.coze.entity;
+package com.iohw.knobot.coze.model;
 
 import lombok.Data;
 

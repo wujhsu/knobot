@@ -1,7 +1,7 @@
-package com.iohw.knobot.chat.entity.convert;
+package com.iohw.knobot.chat.model.convert;
 
-import com.iohw.knobot.chat.entity.ChatSessionDO;
-import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
+import com.iohw.knobot.chat.model.ChatSessionDO;
+import com.iohw.knobot.chat.model.dto.ChatSessionDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

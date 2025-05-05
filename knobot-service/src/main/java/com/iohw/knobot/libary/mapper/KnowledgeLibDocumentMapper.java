@@ -1,6 +1,6 @@
 package com.iohw.knobot.libary.mapper;
 
-import com.iohw.knobot.library.entity.KnowledgeLibDocumentDO;
+import com.iohw.knobot.library.model.KnowledgeLibDocumentDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;

@@ -1,16 +1,12 @@
 package com.iohw.knobot.home.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.iohw.knobot.chat.assistant.IAssistant.EmailAssistant;
 import com.iohw.knobot.chat.request.command.SubmitIssueCommand;
 import com.iohw.knobot.chat.tool.SendEmailTool;
-import com.iohw.knobot.common.request.CozeWorkFlowRequest;
-import com.iohw.knobot.common.response.CozeWorkFlowResponse;
 import com.iohw.knobot.common.response.Result;
-import com.iohw.knobot.coze.entity.WeatherData;
+import com.iohw.knobot.coze.model.WeatherData;
 import com.iohw.knobot.coze.request.DayWhetherRequest;
 import com.iohw.knobot.home.serivce.CozeService;
-import com.iohw.knobot.utils.CozeClient;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.AiServices;
 import lombok.extern.slf4j.Slf4j;

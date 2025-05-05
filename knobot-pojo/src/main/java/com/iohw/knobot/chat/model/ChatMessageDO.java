@@ -1,4 +1,4 @@
-package com.iohw.knobot.chat.entity;
+package com.iohw.knobot.chat.model;
 
 import lombok.Builder;
 import lombok.Data;

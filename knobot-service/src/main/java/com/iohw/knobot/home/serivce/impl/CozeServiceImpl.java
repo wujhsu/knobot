@@ -3,7 +3,7 @@ package com.iohw.knobot.home.serivce.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.iohw.knobot.common.request.CozeWorkFlowRequest;
 import com.iohw.knobot.common.response.CozeWorkFlowResponse;
-import com.iohw.knobot.coze.entity.WeatherData;
+import com.iohw.knobot.coze.model.WeatherData;
 import com.iohw.knobot.coze.request.DayWhetherRequest;
 import com.iohw.knobot.home.serivce.CozeService;
 import com.iohw.knobot.utils.CozeClient;
