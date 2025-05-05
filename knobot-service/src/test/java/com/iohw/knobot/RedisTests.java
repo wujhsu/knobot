@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  * @date: 2025/5/4 21:55
  * @description:
  */
-@SpringBootTest(classes = KnobotServiceApplication.class)
+@SpringBootTest(classes = KnobotWebApplication.class)
 public class RedisTests {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
