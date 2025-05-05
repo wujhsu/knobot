@@ -1,8 +1,8 @@
 package com.iohw.knobot.libary.service;
 
-import com.iohw.knobot.library.entity.KnowledgeLibDO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibNameVO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
+import com.iohw.knobot.library.model.KnowledgeLibDO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibNameVO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibVO;
 import com.iohw.knobot.library.request.*;
 
 import java.util.List;

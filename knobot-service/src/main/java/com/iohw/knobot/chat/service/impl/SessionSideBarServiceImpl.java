@@ -1,8 +1,8 @@
 package com.iohw.knobot.chat.service.impl;
 
-import com.iohw.knobot.chat.entity.ChatMessageDO;
-import com.iohw.knobot.chat.entity.convert.ChatSessionConverter;
-import com.iohw.knobot.chat.entity.enums.ChatSessionEnum;
+import com.iohw.knobot.chat.model.ChatMessageDO;
+import com.iohw.knobot.chat.model.convert.ChatSessionConverter;
+import com.iohw.knobot.chat.model.enums.ChatSessionEnum;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
 import com.iohw.knobot.chat.mapper.ChatSessionMapper;
 import com.iohw.knobot.chat.request.command.CreateConversationCommand;
@@ -14,8 +14,8 @@ import com.iohw.knobot.common.response.Result;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.iohw.knobot.chat.entity.dto.ChatSessionDto;
-import com.iohw.knobot.chat.entity.ChatSessionDO;
+import com.iohw.knobot.chat.model.dto.ChatSessionDto;
+import com.iohw.knobot.chat.model.ChatSessionDO;
 import java.util.List;
 import java.util.UUID;
 

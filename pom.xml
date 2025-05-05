@@ -29,6 +29,7 @@
         <fastjson.version>2.0.47</fastjson.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <caffeine.version>3.1.8</caffeine.version>
+        <hutool.version>5.8.22</hutool.version>
     </properties>
 
     <dependencyManagement>
@@ -94,6 +95,11 @@
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-pgvector</artifactId>
                 <version>${langchain4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>

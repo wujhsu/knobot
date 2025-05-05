@@ -1,6 +1,6 @@
 package com.iohw.knobot.home.serivce;
 
-import com.iohw.knobot.coze.entity.WeatherData;
+import com.iohw.knobot.coze.model.WeatherData;
 import com.iohw.knobot.coze.request.DayWhetherRequest;
 
 /**

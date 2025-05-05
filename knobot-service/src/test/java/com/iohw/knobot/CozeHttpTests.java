@@ -2,16 +2,12 @@ package com.iohw.knobot;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 import com.iohw.knobot.common.request.CozeWorkFlowRequest;
 import com.iohw.knobot.common.response.CozeWorkFlowResponse;
-import com.iohw.knobot.coze.entity.WeatherData;
+import com.iohw.knobot.coze.model.WeatherData;
 import com.iohw.knobot.coze.request.DayWhetherRequest;
-import com.iohw.knobot.coze.response.DayWhetherResponse;
 import com.iohw.knobot.utils.CozeClient;
-import lombok.Builder;
 import okhttp3.*;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

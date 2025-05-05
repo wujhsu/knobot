@@ -3,16 +3,13 @@ package com.iohw.knobot.chat.config;
 import com.alibaba.fastjson.JSONObject;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.iohw.knobot.chat.entity.ChatMessageDO;
+import com.iohw.knobot.chat.model.ChatMessageDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
-import com.iohw.knobot.chat.mapper.ChatSessionMapper;
 import com.iohw.knobot.utils.IdGeneratorUtil;
-import dev.langchain4j.community.model.dashscope.QwenTokenizer;
 import dev.langchain4j.data.message.*;
 import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

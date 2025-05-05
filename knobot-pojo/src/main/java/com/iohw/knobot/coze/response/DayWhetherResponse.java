@@ -1,6 +1,6 @@
 package com.iohw.knobot.coze.response;
 
-import com.iohw.knobot.coze.entity.WeatherData;
+import com.iohw.knobot.coze.model.WeatherData;
 import lombok.Data;
 
 import java.util.List;

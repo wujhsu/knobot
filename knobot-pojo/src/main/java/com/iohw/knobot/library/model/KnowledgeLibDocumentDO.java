@@ -1,4 +1,4 @@
-package com.iohw.knobot.library.entity;
+package com.iohw.knobot.library.model;
 
 import lombok.Data;
 import java.time.LocalDateTime;

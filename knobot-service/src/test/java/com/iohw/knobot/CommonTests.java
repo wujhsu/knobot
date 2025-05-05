@@ -5,6 +5,7 @@ import com.alibaba.dashscope.app.ApplicationParam;
 import com.alibaba.dashscope.app.ApplicationResult;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.iohw.knobot.common.enums.ErrorEnum;
 import com.iohw.knobot.utils.IdGeneratorUtil;
 import com.iohw.knobot.utils.IpAddressUtil;
 import org.junit.jupiter.api.Test;
@@ -59,5 +60,10 @@ public class CommonTests {
     @Test
     public void test6() {
         System.out.println(IpAddressUtil.getLocalIP());
+    }
+
+    @Test
+    public void test7() {
+        System.out.println(ErrorEnum.USER_NOT_EXIST.getDesc());
     }
 }

@@ -2,9 +2,9 @@ package com.iohw.knobot.libary.controller;
 
 import com.iohw.knobot.libary.service.KnowledgeLibDocumentService;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibDocumentVO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibNameVO;
-import com.iohw.knobot.library.entity.vo.KnowledgeLibVO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibDocumentVO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibNameVO;
+import com.iohw.knobot.library.model.vo.KnowledgeLibVO;
 import com.iohw.knobot.library.request.QueryDocumentLibRequest;
 import com.iohw.knobot.library.request.QueryLibraryDetailListRequest;
 import com.iohw.knobot.library.request.QueryLibraryListRequest;
