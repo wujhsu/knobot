@@ -27,7 +27,7 @@ import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metad
  * @date: 2025/4/21 21:53
  * @description:
  */
-@SpringBootTest(classes = KnobotServiceApplication.class)
+@SpringBootTest(classes = KnobotWebApplication.class)
 public class FilterTests {
     @Autowired
     private ChatLanguageModel chatLanguageModel;

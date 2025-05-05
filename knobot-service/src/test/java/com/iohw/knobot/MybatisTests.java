@@ -1,8 +1,8 @@
 package com.iohw.knobot;
 
-import com.iohw.knobot.chat.model.ChatSessionDO;
+import com.iohw.knobot.chat.model.ChatConversationDO;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
-import com.iohw.knobot.chat.mapper.ChatSessionMapper;
+import com.iohw.knobot.chat.mapper.ChatConversationMapper;
 import com.iohw.knobot.libary.mapper.KnowledgeLibMapper;
 import com.iohw.knobot.library.model.KnowledgeLibDO;
 import com.iohw.knobot.utils.IdGeneratorUtil;
@@ -20,15 +20,15 @@ import java.util.List;
 @SpringBootTest(classes = KnobotServiceApplication.class)
 public class MybatisTests {
     @Autowired
-    private ChatSessionMapper sessionMapper;
+    private ChatConversationMapper sessionMapper;
     @Autowired
     private ChatMessageMapper messageMapper;
     @Autowired
     private KnowledgeLibMapper knowledgeLibMapper;
     @Test
     public void test() {
-        List<ChatSessionDO> chatSessionDOS = sessionMapper.selectByUserId(2l, 0);
-        System.out.println("chatSessionDOS = " + chatSessionDOS);
+        List<ChatConversationDO> chatConversationDOS = sessionMapper.selectByUserId(2l, 0);
+        System.out.println("chatSessionDOS = " + chatConversationDOS);
     }
 
     @Test
