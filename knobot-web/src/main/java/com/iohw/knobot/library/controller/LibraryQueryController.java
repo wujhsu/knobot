@@ -1,4 +1,4 @@
-package com.iohw.knobot.libary.controller;
+package com.iohw.knobot.library.controller;
 
 import com.iohw.knobot.libary.service.KnowledgeLibDocumentService;
 import com.iohw.knobot.libary.service.KnowledgeLibService;
@@ -19,14 +19,14 @@ import java.util.List;
 /**
  * @author: iohw
  * @date: 2025/4/25 22:29
- * @description:
+ * @description: 知识库查询控制器
  */
 @RestController
 @RequestMapping("/library")
 @RequiredArgsConstructor
 public class LibraryQueryController {
-    final KnowledgeLibService knowledgeLibService;
-    final KnowledgeLibDocumentService knowledgeLibDocumentService;
+    private final KnowledgeLibService knowledgeLibService;
+    private final KnowledgeLibDocumentService knowledgeLibDocumentService;
 
     @GetMapping("/queryLibraryDetailList")
     public Result<List<KnowledgeLibVO>> queryLibraryDetailList(QueryLibraryDetailListRequest request) {
@@ -38,7 +38,7 @@ public class LibraryQueryController {
         return Result.success(knowledgeLibService.queryKnowledgeLibList(request));
     }
 
-    @GetMapping("queryLibraryDocumentList")
+    @GetMapping("/queryLibraryDocumentList")
     public Result<List<KnowledgeLibDocumentVO>> queryLibraryDocumentList(QueryDocumentLibRequest request) {
         return Result.success(knowledgeLibDocumentService.queryDocumentList(request.getKnowledgeLibId()));
     }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: knobot-service
+    name: knobot-web
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -73,7 +73,7 @@ pgvector:
 search:
   # api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
   engine: google
-  api-key: a3NXKiXu2AiRg68BJBiegThg
+  api-key:
 
 llm:
   apikey:

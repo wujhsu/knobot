@@ -41,22 +41,21 @@ import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.load
 /**
  * @author: iohw
  * @date: 2025/4/12 19:37
- * @description:
+ * @description: 聊天控制器
  */
 @Slf4j
 @RestController
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
-    final SessionSideBarService sessionSideBarService;
-    final ChatService chatService;
-    final AssistantService assistantService;
-    final WebSearchAssistant webSearchAssistant;
-    final FileUploadFactory fileUploadFactory;
-    final EmbeddingStoreIngestor ingestor;
+    private final SessionSideBarService sessionSideBarService;
+    private final ChatService chatService;
+    private final AssistantService assistantService;
+    private final WebSearchAssistant webSearchAssistant;
+    private final FileUploadFactory fileUploadFactory;
+    private final EmbeddingStoreIngestor ingestor;
 
-    private static Map<String, String> filePathMap = new HashMap<>();
-
+    private static final Map<String, String> filePathMap = new HashMap<>();
 
     @PostMapping("/upload")
     public Result<FileUploadVO> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -111,9 +110,7 @@ public class ChatController {
                             emitter.completeWithError(e);
                         }
                     })
-                    .onError(e -> {
-                        emitter.completeWithError(e);
-                    })
+                    .onError(e -> emitter.completeWithError(e))
                     .start();
         } catch (Exception e) {
             emitter.completeWithError(e);
@@ -127,7 +124,6 @@ public class ChatController {
         Document document = loadDocument(path.toString(), parser);
         ingestor.ingest(document);
     }
-
 
     @GetMapping("/conversation-history")
     public Result<List<ChatSessionDto>> queryChatConversationHistory(Long userId) {
@@ -145,7 +141,7 @@ public class ChatController {
     }
 
     @PostMapping("/conversation-title-update")
-    public Result<Void> deleteChatConversationTitleUpdate(@RequestBody UpdateConversationTitleCommand command) {
+    public Result<Void> updateChatConversationTitle(@RequestBody UpdateConversationTitleCommand command) {
         return sessionSideBarService.deleteChatConversationTitleUpdate(command);
     }
 
@@ -153,5 +149,4 @@ public class ChatController {
     public Result<List<ChatMessageDto>> queryHistoryMessages(String memoryId) {
         return chatService.queryHistoryMessages(memoryId);
     }
-
 }
