@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.iohw.knobot.chat.mapper.ChatSessionMapper">
+<mapper namespace="com.iohw.knobot.chat.mapper.ChatConversationMapper">
 
-    <resultMap id="BaseResultMap" type="com.iohw.knobot.chat.model.ChatSessionDO">
+    <resultMap id="BaseResultMap" type="com.iohw.knobot.chat.model.ChatConversationDO">
         <id column="id" property="id"/>
         <result column="memory_id" property="memoryId"/>
         <result column="user_id" property="userId"/>
@@ -16,22 +16,22 @@
         id, memory_id, user_id, title, status, create_time, update_time
     </sql>
 
-    <insert id="insert" parameterType="com.iohw.knobot.chat.model.ChatSessionDO">
-        INSERT INTO chat_session (memory_id, user_id, title)
+    <insert id="insert" parameterType="com.iohw.knobot.chat.model.ChatConversationDO">
+        INSERT INTO chat_conversation (memory_id, user_id, title)
         VALUES (#{memoryId}, #{userId}, #{title})
     </insert>
 
     <select id="selectByMemoryId" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM chat_session
+        FROM chat_conversation
         WHERE memory_id = #{memoryId}
     </select>
 
     <select id="selectByUserId" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM chat_session
+        FROM chat_conversation
         WHERE user_id = #{userId}
         <if test="status != null">
             AND status = #{status}
@@ -40,25 +40,25 @@
     </select>
 
     <update id="updateTitle">
-        UPDATE chat_session
+        UPDATE chat_conversation
         SET title = #{title}
         WHERE memory_id = #{memoryId}
     </update>
 
     <update id="updateStatus">
-        UPDATE chat_session
+        UPDATE chat_conversation
         SET status = #{status}
         WHERE memory_id = #{memoryId}
     </update>
 
     <delete id="deleteByMemoryId">
-        DELETE FROM chat_session
+        DELETE FROM chat_conversation
         WHERE memory_id = #{memoryId}
     </delete>
 
     <select id="checkOwnership" resultType="java.lang.Boolean">
         SELECT COUNT(1) > 0
-        FROM chat_session
+        FROM chat_conversation
         WHERE memory_id = #{memoryId}
         AND user_id = #{userId}
     </select>

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class ChatSessionDO {
+public class ChatConversationDO {
     private Long id;
     private String memoryId;
     private Long userId;
