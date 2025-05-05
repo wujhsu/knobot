@@ -6,9 +6,9 @@
 
 搜索引擎api-key获取：Searchapi（限额100次） https://www.searchapi.io/
 
-向量数据库pgvector安装： docker pull ankane/pgvector 创建库名为`vecdb`，表在成功启动时自动创建
+向量数据库pgvector安装： `docker pull ankane/pgvector` 创建库名为`vecdb`，表在成功启动时自动创建
 
-mysql初始化：脚本位于knobot-service/src/main/resources/init.sql
+mysql初始化：脚本位于`knobot-service/src/main/resources/init.sql`
 
 **tips**
 如果想使用其它LLM大模型，自己去配置，并在AiConfig配置类中解开注释↓  
