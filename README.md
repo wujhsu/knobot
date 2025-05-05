@@ -11,7 +11,7 @@
 mysql初始化：脚本位于`knobot-service/src/main/resources/init.sql`
 
 
-**tips**
+**tips：**
 如果想使用其它LLM大模型，自己去配置，并在AiConfig配置类中解开注释↓  
 ![image](https://github.com/user-attachments/assets/6e161767-d9db-40fd-aedb-071b9bd45b54)
 ![image](https://github.com/user-attachments/assets/6c99dcc1-9646-42f0-9856-a3bdef5b7977)
