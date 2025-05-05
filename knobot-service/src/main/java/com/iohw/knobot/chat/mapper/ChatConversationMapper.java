@@ -1,22 +1,22 @@
 package com.iohw.knobot.chat.mapper;
 
-import com.iohw.knobot.chat.model.ChatSessionDO;
+import com.iohw.knobot.chat.model.ChatConversationDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
-public interface ChatSessionMapper {
+public interface ChatConversationMapper {
 
     // 创建新的会话记忆
-    int insert(ChatSessionDO record);
+    int insert(ChatConversationDO record);
 
     // 根据 memoryId 查询会话记忆
-    ChatSessionDO selectByMemoryId(@Param("memoryId") String memoryId);
+    ChatConversationDO selectByMemoryId(@Param("memoryId") String memoryId);
 
     // 查询用户的所有会话记忆，按更新时间倒序排列
-    List<ChatSessionDO> selectByUserId(@Param("userId") Long userId, @Param("status") Integer status);
+    List<ChatConversationDO> selectByUserId(@Param("userId") Long userId, @Param("status") Integer status);
 
     // 更新会话标题
     int updateTitle(@Param("memoryId") String memoryId, @Param("title") String title);

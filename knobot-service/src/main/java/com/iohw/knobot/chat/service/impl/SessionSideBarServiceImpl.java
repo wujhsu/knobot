@@ -1,10 +1,10 @@
 package com.iohw.knobot.chat.service.impl;
 
 import com.iohw.knobot.chat.model.ChatMessageDO;
-import com.iohw.knobot.chat.model.convert.ChatSessionConverter;
+import com.iohw.knobot.chat.model.convert.ChatConversationConverter;
 import com.iohw.knobot.chat.model.enums.ChatSessionEnum;
 import com.iohw.knobot.chat.mapper.ChatMessageMapper;
-import com.iohw.knobot.chat.mapper.ChatSessionMapper;
+import com.iohw.knobot.chat.mapper.ChatConversationMapper;
 import com.iohw.knobot.chat.request.command.CreateConversationCommand;
 import com.iohw.knobot.chat.request.command.DeleteConversationCommand;
 import com.iohw.knobot.chat.request.command.UpdateConversationTitleCommand;
@@ -15,7 +15,7 @@ import com.iohw.knobot.utils.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iohw.knobot.chat.model.dto.ChatSessionDto;
-import com.iohw.knobot.chat.model.ChatSessionDO;
+import com.iohw.knobot.chat.model.ChatConversationDO;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,27 +29,27 @@ import static com.iohw.knobot.chat.constant.ChatConstant.NEW_SESSION_TITLE;
 @Service
 public class SessionSideBarServiceImpl implements SessionSideBarService {
     @Autowired
-    private ChatSessionMapper chatSessionMapper;
+    private ChatConversationMapper chatConversationMapper;
     @Autowired
     private ChatMessageMapper chatMessageMapper;
 
     @Override
     public Result<List<ChatSessionDto>> queryChatConversation(long userId) {
-        List<ChatSessionDO> chatSessionDOS = chatSessionMapper.selectByUserId(userId, 0);
-        return Result.success(ChatSessionConverter.INSTANCE.toDtoList(chatSessionDOS));
+        List<ChatConversationDO> chatConversationDOS = chatConversationMapper.selectByUserId(userId, 0);
+        return Result.success(ChatConversationConverter.INSTANCE.toDtoList(chatConversationDOS));
     }
 
     @Override
     public Result<ChatSessionVO> createChatConversation(CreateConversationCommand request) {
         String memoryId = UUID.randomUUID().toString();
         Long userId = request.getUserId();
-        ChatSessionDO chatSessionDO = ChatSessionDO.builder()
+        ChatConversationDO chatConversationDO = ChatConversationDO.builder()
                 .title(NEW_SESSION_TITLE)
                 .status(ChatSessionEnum.NORMAL.getStatus())
                 .memoryId(memoryId)
                 .userId(userId)
                 .build();
-        chatSessionMapper.insert(chatSessionDO);
+        chatConversationMapper.insert(chatConversationDO);
         // 附上机器人问候语
         ChatMessageDO chatMessageDO = ChatMessageDO.builder()
                 .messageId(IdGeneratorUtil.generateId())
@@ -67,13 +67,13 @@ public class SessionSideBarServiceImpl implements SessionSideBarService {
 
     @Override
     public Result<Void> deleteChatConversation(DeleteConversationCommand request) {
-        chatSessionMapper.updateStatus(request.getMemoryId(), 2);
+        chatConversationMapper.updateStatus(request.getMemoryId(), 2);
         return Result.success(null);
     }
 
     @Override
     public Result<Void> deleteChatConversationTitleUpdate(UpdateConversationTitleCommand command) {
-        chatSessionMapper.updateTitle(command.getMemoryId(), command.getNewTitle());
+        chatConversationMapper.updateTitle(command.getMemoryId(), command.getNewTitle());
         return Result.success(null);
     }
 }
