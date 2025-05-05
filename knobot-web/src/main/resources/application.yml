@@ -72,7 +72,7 @@ pgvector:
 
 search:
   engine: google
-  api-key: a3NXKiXu2AiRg68BJBiegThg
+  api-key:
 
 llm:
   apikey:
