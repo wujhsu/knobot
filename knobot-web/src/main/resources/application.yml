@@ -1,13 +1,13 @@
 spring:
   application:
-    name: knobot-service
+    name: knobot-web
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password:
     url: jdbc:mysql://localhost:3306/knobot?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&characterSetResults=utf8mb4&connectionCollation=utf8mb4_unicode_ci
   mail:
-    username: 3979892804@qq.com
+    username:
     password:
     host: smtp.qq.com
     port: 587
@@ -24,6 +24,11 @@ spring:
             required: false
           #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
         debug: false
+  data:
+    redis:
+      host:
+      port: 6379
+      database: 15
 
 server:
   port: 8080
@@ -60,14 +65,13 @@ pgvector:
   host:
   port: 5432
   user: postgres
-  password:
+  password: postgres
   table: vectors_db
-
 
 search:
   # api-key: AIzaSyDa3_P7DeKYzPme0RGXXEXvnIa4t-Y9wy0
   engine: google
-  api-key:
+  api-key: a3NXKiXu2AiRg68BJBiegThg
 
 llm:
   apikey:

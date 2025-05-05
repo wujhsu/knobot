@@ -9,8 +9,8 @@ import com.iohw.knobot.coze.request.DayWhetherRequest;
 import com.iohw.knobot.home.serivce.CozeService;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.AiServices;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,18 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author: iohw
  * @date: 2025/4/23 23:04
- * @description:
+ * @description: 首页控制器
  */
 @Slf4j
 @RestController
 @RequestMapping("/home")
+@RequiredArgsConstructor
 public class HomeController {
-    @Autowired
-    private ChatLanguageModel model;
-    @Autowired
-    private SendEmailTool sendEmailTool;
-    @Autowired
-    private CozeService cozeService;
+    private final ChatLanguageModel model;
+    private final SendEmailTool sendEmailTool;
+    private final CozeService cozeService;
 
     @PostMapping("/submit-issue")
     public Result<Void> submitIssue(@RequestBody SubmitIssueCommand issue) {
