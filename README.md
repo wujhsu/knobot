@@ -3,8 +3,11 @@
 
 ## 环境配置
 大模型api-key获取：阿里百炼平台 https://bailian.console.aliyun.com/?spm=5176.29597918.J_SEsSjsNv72yRuRFS2VknO.2.635b7ca0Mz7cuE&tab=model#/api-key
+
 搜索引擎api-key获取：Searchapi（限额100次） https://www.searchapi.io/
+
 向量数据库pgvector安装： docker pull ankane/pgvector 创建库名为`vecdb`，表在成功启动时自动创建
+
 mysql初始化：脚本位于knobot-service/src/main/resources/init.sql
 
 **tips**
